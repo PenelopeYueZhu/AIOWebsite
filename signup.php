@@ -79,7 +79,11 @@ else { // So the form has been posted
     if( !$result ){
       echo 'Something went wrong while registering. Please try again later.';
     }
-    else echo 'Registered successfully!';
+    else {
+      echo $_POST['user_name'];
+                     echo $_POST['user_pw'];
+      echo 'Registered successfully!';
+    }
   }
 }
 include 'footer.php';
