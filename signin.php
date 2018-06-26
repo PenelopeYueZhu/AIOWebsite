@@ -6,7 +6,7 @@ include 'header.php';
 echo '<h3>Sign in</h3>';
 
 // First check if the user has already signed in;
-if( isset ($_SESSION['signed_in'] ) ){
+if( isset($_SESSION['signed_in']) && ($_SESSION['signed_in'] ) ){
   echo 'You are already signed in.';
 }
 else {
@@ -60,8 +60,6 @@ else {
       else {
         // When we can't get the username and password pair
         if( mysqli_num_rows ( $result ) == 0 ) {
-          echo $_POST['user_name'];
-                         echo $_POST['user_pw'];
           echo 'Incorrect username or password. Please try again.';
         }
         else {
@@ -73,7 +71,7 @@ else {
             $_SESSION['user_level'] = $row['user_level'];
           }
 
-          echo 'Welcome, ' . $_SESSION['user_name'] . '. <a href="index.php">Home</a>';
+          echo 'Welcome, ' . $_SESSION['user_name'] . '. <a href="create_cat.php">Home</a>';
         }
       }
     }

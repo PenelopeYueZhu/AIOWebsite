@@ -1,5 +1,6 @@
 <?php
 //connect.php
+session_start();
 $server = 'localhost';
 $username   = 'Panda';
 $password   = '0000';
