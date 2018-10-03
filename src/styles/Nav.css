@@ -1,0 +1,52 @@
+/*
+ * Tutorial source:
+ *https://blog.lunarlogic.io/2018/slidedown-menu-in-react/
+ */
+
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
+nav {
+  display: inline-block;
+  margin: 2rem auto 0;
+  background: #0d2035;
+  color: #fff;
+  text-align: middle;
+  float: left;
+}
+
+a {
+    text-decoration: none;
+    display: block;
+    padding: 0 16px;
+    line-height: inherit;
+    cursor: pointer;
+    color: white;
+}
+
+a:visited {
+  text-decoration: none;
+  color: white;
+}
+
+.nav-menu {
+  line-height: 45px;
+  font-weight: 700;
+  text-transform: uppercase;
+  list-style: none;
+  padding-left: 0;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+li {
+  display: inline-block;
+  position: relative;
+  padding: 16px;
+}
+
+li:hover {
+  background-color: #00aeef;
+  display: inline-block;
+}

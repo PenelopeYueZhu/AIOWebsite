@@ -1,0 +1,15 @@
+.mainBody {
+  width: 100%;
+  margin: auto;
+}
+
+.logged-in-user {
+  font-size: 20px;
+  float:left;
+  background-color: pink;
+}
+
+.left {
+  float: left;
+  background-color: pink;
+}
