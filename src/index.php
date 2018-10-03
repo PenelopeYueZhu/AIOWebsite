@@ -31,19 +31,33 @@
   <div class="mainBody">
     <div class="left">
       <!-- Personal account if logged in. If not, it says log in or sign up-->
-      <?php
-        //if( !isset($_SESSION['signed_in'] ) ) $_SESSION['signed_in'] = false;
-        if( isset( $_SESSION['signed_in'] ) && $_SESSION['signed_in'])
-          echo '<div class="logged-in-user">Hello ' . $_SESSION['user_name'] .
-               '. Not you? <a href="signout.php">Sign out</a> </div>';
-        else
-          echo '<div class="not-logged-in-user"><a href="signin.php">Sign in</a>
-              or <a href="signup.php">create an account</a>. </div>';
-      ?>
+      <?php if( isset( $_SESSION['signed_in'] ) && $_SESSION['signed_in']) : ?>
+
+        <div class="logged-in-user">
+          Hello, <?php echo $_SESSION['user_name'] ?>.
+          Not you? <a href="signout.php">Sign out</a>
+          <a>View your question history</a>
+          <a>Update your profile</a>
+
+          <?php if( $_SESSION['user_permission'] <= 1 ) : // If you are peer ?>
+
+            <a>View your reply history</a>
+            <?php if( $_SESSION['user_permission'] == 0 ) : // If you are admin ?>
+              <a>Manage users</a>
+            <?php endif; ?>
+
+          <?php endif; //End control if it's a student or from office?>
+        </div>
+
+      <?php else: ?>
+          <div class="not-logged-in-user">
+            <a href="signin.php">Sign in</a>
+            or <a href="signup.php">create an account</a>. </div>
+      <?php endif; // End control for logged in or not ?>
     </div>
     <div id="middle">
 
-  </div>
+   </div>
   </div>
 </body>
 <script type="text/javascript" src="index_bundle.js"></script></body>

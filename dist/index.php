@@ -39,12 +39,10 @@
           <a>View your question history</a>
           <a>Update your profile</a>
 
-          <!-- Check to see if the user is a student or a peer -->
-          <?php if( $_SESSION['user_permission'] <= 1 ) : ?>
+          <?php if( $_SESSION['user_permission'] <= 1 ) : // If you are peer ?>
 
             <a>View your reply history</a>
-            <!-- Check if you are the admin -->
-            <?php if( $_SESSION['user_permission'] == 0 ) : ?>
+            <?php if( $_SESSION['user_permission'] == 0 ) : // If you are admin ?>
               <a>Manage users</a>
             <?php endif; ?>
 
