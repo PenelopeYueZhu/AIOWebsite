@@ -60,6 +60,7 @@
         <?php
           $sql = "SELECT
                       user_id,
+                      permission,
                       user_name,
                       user_level
                   FROM
@@ -91,7 +92,7 @@
               while( $row = mysqli_fetch_assoc( $result ) ) {
                 $_SESSION['user_id'] = $row['user_id'];
                 $_SESSION['user_name'] = $row['user_name'];
-                $_SESSION['user_level'] = $row['user_level'];
+                $_SESSION['user_permission'] = $row['permission'];
               }
               echo 'Welcome, ' . $_SESSION['user_name'] .
                    '. <a href="index.php">Home</a>';

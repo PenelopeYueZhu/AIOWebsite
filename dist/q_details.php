@@ -30,27 +30,27 @@
             WHERE q_id = $q_id
            ";
 
-    $result = mysqli_query( $_SESSION['link'], $sql );
-    if( !$result ) {
+    $result_question = mysqli_query( $_SESSION['link'], $sql );
+    if( !$result_question ) {
       echo 'Failed to load the database.';
     }
     else { // Display the question
-      $row = mysqli_fetch_assoc( $result );
-      echo '<h1>' . $row['q_subject'] . '</h1>';
-      echo '<p>' . $row['q_content'] . '<p>';
+      $row_question = mysqli_fetch_assoc( $result_question );
+      echo '<h1>' . $row_question['q_subject'] . '</h1>';
+      echo '<p>' . $row_question['q_content'] . '<p>';
     }
   }
 
   /* Display replies, if thre is any */
   $sql_reply = "SELECT
-              reply_id,
-              DATE(reply_date),
-              reply_by,
-              reply_content
-          FROM
-              replies
-          WHERE reply_q_id = $q_id
-         ";
+                    reply_id,
+                    DATE(reply_date),
+                    reply_by,
+                    reply_content
+                 FROM
+                     replies
+                 WHERE reply_q_id = $q_id
+               ";
   $result_reply = mysqli_query( $_SESSION['link'], $sql_reply );
   if( !$result_reply ) echo 'Failed to load the database.';
   // When there is a reply
@@ -119,6 +119,31 @@
         $query = "COMMIT;";
         $result_query = mysqli_query( $_SESSION['link'], $query );
         echo 'Your reply has been posted.';
+
+        /* Send an email to the user who posted the Question */
+        // First get the email of the sender
+        $sql_sender = "SELECT
+                           user_email
+                       FROM
+                           users
+                       WHERE
+                           '" . $row_question['q_by'] . "' = user_id
+                      ";
+        $result_sender = mysqli_query( $_SESSION['link'], $sql_sender );
+        if( !$result_sender ) {
+          echo 'Failed to load the database.';
+        }
+        else { // Display the question
+          $sender_email = mysqli_fetch_assoc( $result_question )['user_email'];
+
+          $subject = 'Your got a respond to your question on AIO forum!';
+          $message = 'Hello, your question on AIO online forum has gotten a
+                      reply. Please visit the website to check it out!';
+          if( !mail( $sender_email, $subject, $message ) ) {
+            echo 'fail to notify the original post owner';
+          }
+        }
+
       } // End of else !result_reply
     }
   }
