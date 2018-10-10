@@ -43,7 +43,7 @@
 
             <a>View your reply history</a>
             <?php if( $_SESSION['user_permission'] == 0 ) : // If you are admin ?>
-              <a>Manage users</a>
+              <a href="admin-manage.php">Manage users</a>
             <?php endif; ?>
 
           <?php endif; //End control if it's a student or from office?>
