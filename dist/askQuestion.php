@@ -8,78 +8,68 @@
   <meta name="keywords" content="UCSD, integrity, question, realtime"/>
   <title>Integrity Overflow - Ask Us A Question</title>
 
+  <!-- Linking in bootstrap -->
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+  <!-- jQuery library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!-- Popper JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+  <!-- Latest compiled JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+
 </head>
 <body>
   <?php include 'connect.php' ?>
-  <?php if( !(isset($_SESSION['signed_in']) && ($_SESSION['signed_in'] ) ) ):?>
-    <!--If the user is not signed in, then we need to prompt him/her to sign in -->
 
-    <h4 class="Error">You are not signed in.<p>
-    <a href="signin.php">Sign In Here.</a>
-  <?php else : ?>
-      <!-- The form has not been posted, so we just display the information-->
-      <?php if( $_SERVER['REQUEST_METHOD'] != 'POST' ) : ?>
+  <!-- Head banner -->
+  <div class="jumbotron text-center" style="margin-bottom:0;">
+    <h1 style="font-size: 50px">UCSD AIO Online</h1>
+    <h2>For general questions, please visit our website first. We might have
+       the answer for you there.</p>
 
-        <?php if( count( $_SESSION['categories'] ) == 0 ) :?>
-          <p class="Error">Before you can post anything,
-              please wait for admin to create categoreis</p>
-        <?php else : ?>
-          <form method="post" action="">
-            Subject: <input type="text" name="q_subject" />
-            Category:<select name="q_cat">
+    <h2 style="color: red"> NOTE: For questions or concerns that involve personal information such as name,
+             student id, or anything that can identify a specific person, please
+             email us at aio@ucsd.edu through your ucsd email. Emailing is the only
+             secure communication channel, so please help us protect your and others'
+             privacy. </h2>
+  </div>
 
-            <?php
-              for( $i = 0 ; $i < count( $_SESSION['categories'] ); $i++ ) {
-                echo '<option value="' . ($i+1) .
-                     '">' . $_SESSION['categories'][$i]
-                     . '</option>';
-              }
-            ?>
-           </select>
+  <div id="middle">
 
-            Message: <textarea name="q_content" /></textarea>
-                  <input type="submit" value="post_question"/>
-           </form>
+  </div>
 
-         <?php endif; ?>
-
-    <?php else :// When we do post the question, process the form ?>
-      <?php // Start the transaction
-      $query = "BEGIN WORK;";
-      $result = mysqli_query( $_SESSION['link'], $query );
-      // If the connection has failed
-      if( !$result )
-        echo 'An error has occured when trying to load the database.?Begin work';
-      // else we start to process the form
-      else {
-        $sql = "INSERT INTO
-                    questions(q_subject, q_date, q_cat, q_by, q_content)
-                VALUES( '" . mysqli_real_escape_string($_SESSION['link'],
-                                                   $_POST['q_subject']) . "',
-                       NOW(),
-                       '" . mysqli_real_escape_string($_SESSION['link'],
-                                                   $_POST['q_cat']) . "',
-                       '" . $_SESSION['user_id'] . "',
-                       '" . mysqli_real_escape_string($_SESSION['link'],
-                                                   $_POST['q_content']) . "'
-                      )
-                ";
-        $result = mysqli_query( $_SESSION['link'], $sql );
-        if( !$result ) {
-          echo "An error has occured when trying to load the database";
-          $sql = "ROLLBACK;";
-          $result = mysqli_query( $_SESSION['link'], $sql );
+  <form method="post" action="pushQuestion.php">
+    <div class="form-group">
+      <label for="subject">Subject:</label>
+      <input type="text" name="q_subject" />
+    </div>
+    <div class="form-group">
+      <label for"category">Category:</label>
+      <select name="q_cat">
+      <?php
+        for( $i = 0 ; $i < count( $_SESSION['categories'] ); $i++ ) {
+          echo '<option value="' . ($i+1) .
+               '">' . $_SESSION['categories'][$i]
+               . '</option>';
         }
-        else {
-          $sql = "COMMIT;";
-          $result = mysqli_query( $_SESSION['link'], $sql );
-          echo 'Your question has been posted!';
-          echo '<a href="index.php">Home</a>';
-        } // If insert worked
-      } // If "BEGIN WORK;" succeeded
       ?>
-    <!-- End control for if the method is posted or not -->
+      </select>
+    </div>
+
+    <div class="form-group">
+      Message: <textarea name="q_content" /></textarea>
+    </div>
+
+    <?php if( (isset($_SESSION['signed_in']) ) && $_SESSION['signed_in'] )  : ?>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    <?php else: ?>
+      <button type="submit" class="btn btn-primary" disabled >
+        Submit
+      </button>
+      *Please sign in first to ask a question.*
     <?php endif; ?>
-  <!-- End control for is the student has signed in or not -->
-  <?php endif; ?>
+  </form>
 </body>
+
+<script type="text/javascript" src="index_bundle.js"></script></body>

@@ -8,8 +8,34 @@
   <meta name="keywords" content="UCSD, integrity, question, realtime"/>
   <title>Integrity Overflow - Ask Us A Question</title>
 
+  <!-- Linking in bootstrap -->
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+  <!-- jQuery library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!-- Popper JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+  <!-- Latest compiled JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+
 </head>
 <body>
+  <!-- Head banner -->
+  <div class="jumbotron text-center" style="margin-bottom:0;">
+    <h1 style="font-size: 50px">UCSD AIO Online</h1>
+    <h2>For general questions, please visit our website first. We might have
+       the answer for you there.</p>
+
+    <h2 style="color: red"> NOTE: For questions or concerns that involve personal information such as name,
+             student id, or anything that can identify a specific person, please
+             email us at aio@ucsd.edu through your ucsd email. Emailing is the only
+             secure communication channel, so please help us protect your and others'
+             privacy. </h2>
+  </div>
+
+  <div id="middle">
+  </div>
+
 <?php
 // To look at all the questions
 include 'connect.php';
@@ -21,7 +47,6 @@ function getQuestions( $sort_by, $filter_by ) {
     // Get the sorting option
     switch( $sort_by ) {
       case "qNTO":
-        echo 'Newest to oldest';
         $sql_return = "SELECT
                            q_id, q_subject, q_content, q_date, q_by,
                            user_id, user_name
@@ -35,7 +60,6 @@ function getQuestions( $sort_by, $filter_by ) {
                       ";
         break;
       case "qOTN":
-        echo 'Oldest to newest.';
         $sql_return = "SELECT
                            q_id, q_subject, q_content, q_date, q_by,
                            user_id, user_name
@@ -53,7 +77,6 @@ function getQuestions( $sort_by, $filter_by ) {
   else {
     switch( $sort_by ) {
       case "qNTO":
-        echo 'Newest to oldest';
         $sql_return = "SELECT
                            q_id, q_subject, q_content, q_date, q_by,
                            user_id, user_name
@@ -68,7 +91,6 @@ function getQuestions( $sort_by, $filter_by ) {
                       ";
           break;
       case "qOTN":
-        echo 'Oldest to newest.';
         $sql_return = "SELECT
                            q_id, q_subject, q_content, q_date, q_by,
                            user_id, user_name
@@ -87,37 +109,23 @@ function getQuestions( $sort_by, $filter_by ) {
   return $sql_return;
 }
 
-// Put a sorting option, default is to sort by asked time newest first
-//$sorting_option = $_GET['sort'];
-// Filter option, default is to show all the questions
-//$filter_option = $_GET['filter'];
-
-/*$sql = "SELECT
-            cat_id,
-            cat_name,
-            cat_description
-        FROM
-            categories
-       ";
-$result = mysqli_query( $_SESSION['link'], $sql );
-
-// If we cannot retrive result
-if( !$result ) exit('Fail to load the database.');*/
-
 // Sorting drop down list
 // When we have not applied the sorting and filter options
 $sorting_option = "qNTO";
 $filter_option = "0";
-$filter_option = $_POST['filter_by'];
+//$filter_option = $_POST['filter_by'];
 if( $_SERVER['REQUEST_METHOD'] != 'POST') {
-  echo '<form method="post" action="">';
-    echo '<select name="sort_by">';
+  echo '<form class="form-inline" method="post" action="">';
+    echo '<label for="sort">Sort by:</label>';
+    echo '<select name="sort_by" class="form-control">';
       // display the options
       echo '<option value="qNTO">Newest Question first</option>';
       echo '<option value="qOTN">Oldest question first</option>';
     echo '</select>';
+
     // Filter drop down list
-    echo '<select name="filter_by">';
+    echo '<label for="category">Filter by category:</label>';
+    echo '<select name="filter_by" class="form-control">';
       // Display all the categories
       echo '<option value="0">All</option>';
       for( $i = 0 ; $i < count( $_SESSION['categories'] ); $i++ ) {
@@ -126,7 +134,7 @@ if( $_SERVER['REQUEST_METHOD'] != 'POST') {
       }
   echo '</select>';
 
-  echo '<input type="submit" value="Apply"/>
+  echo '<button type="submit" class="btn btn-primary">Submit</button>
         </form>
        ';
 }
@@ -155,19 +163,21 @@ if( !$result ) {
   echo 'Fail to load all the posts.';
 }
 else {
-  echo '<table border="1">
-          <tr>
-            <th>Posted Time</th>
-            <th>Question</th>
-          </tr>
+  echo '<table class="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th>Posted Time</th>
+              <th>Question</th>
+            </tr>
+          </thead>
        ';
   // Display all the questions
   while( $row = mysqli_fetch_assoc( $result ) ){
     echo '<tr>';
-      echo '<td class="leftpart">';
+      echo '<td >';
         echo $row['q_date'];
       echo '</td>';
-      echo '<td class="rightpart">';
+      echo '<td>';
         echo '<a href="q_details.php?id=' . $row['q_id'] . '">' .
              $row['q_subject'] . '</a>';
       echo '</td>';
@@ -177,3 +187,4 @@ else {
 }
 ?>
 </body>
+<script type="text/javascript" src="index_bundle.js"></script></body>

@@ -67,7 +67,7 @@ $_SESSION['discard_after'] = $now + $FINAL_SESSION_TIME_IN_S;
       }
       // Now put this array as a constant in session
       $_SESSION['categories'] = $categories;
-      echo 'TO BE DELETED: ConNECted';
+      //echo 'TO BE DELETED: ConNECted';
     }
   }
 //}

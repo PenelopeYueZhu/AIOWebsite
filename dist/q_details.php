@@ -8,8 +8,34 @@
   <meta name="keywords" content="UCSD, integrity, question, realtime"/>
   <title>Integrity Overflow - Ask Us A Question</title>
 
+
+  <!-- Linking in bootstrap -->
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+  <!-- jQuery library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!-- Popper JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+  <!-- Latest compiled JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 </head>
 <body>
+  <!-- Head banner -->
+  <div class="jumbotron text-center" style="margin-bottom:0;">
+    <h1 style="font-size: 50px">UCSD AIO Online</h1>
+    <h2>For general questions, please visit our website first. We might have
+       the answer for you there.</p>
+
+    <h2 style="color: red"> NOTE: For questions or concerns that involve personal information such as name,
+             student id, or anything that can identify a specific person, please
+             email us at aio@ucsd.edu through your ucsd email. Emailing is the only
+             secure communication channel, so please help us protect your and others'
+             privacy. </h2>
+  </div>
+
+  <!-- Container for react -->
+  <div id="middle">
+  </div>
 
   <?php
   // View an indivial question in detail
@@ -30,27 +56,27 @@
             WHERE q_id = $q_id
            ";
 
-    $result = mysqli_query( $_SESSION['link'], $sql );
-    if( !$result ) {
+    $result_question = mysqli_query( $_SESSION['link'], $sql );
+    if( !$result_question ) {
       echo 'Failed to load the database.';
     }
     else { // Display the question
-      $row = mysqli_fetch_assoc( $result );
-      echo '<h1>' . $row['q_subject'] . '</h1>';
-      echo '<p>' . $row['q_content'] . '<p>';
+      $row_question = mysqli_fetch_assoc( $result_question );
+      echo '<h1>' . $row_question['q_subject'] . '</h1>';
+      echo '<p>' . $row_question['q_content'] . '<p>';
     }
   }
 
   /* Display replies, if thre is any */
   $sql_reply = "SELECT
-              reply_id,
-              DATE(reply_date),
-              reply_by,
-              reply_content
-          FROM
-              replies
-          WHERE reply_q_id = $q_id
-         ";
+                    reply_id,
+                    DATE(reply_date),
+                    reply_by,
+                    reply_content
+                 FROM
+                     replies
+                 WHERE reply_q_id = $q_id
+               ";
   $result_reply = mysqli_query( $_SESSION['link'], $sql_reply );
   if( !$result_reply ) echo 'Failed to load the database.';
   // When there is a reply
@@ -119,8 +145,35 @@
         $query = "COMMIT;";
         $result_query = mysqli_query( $_SESSION['link'], $query );
         echo 'Your reply has been posted.';
+
+        /* Send an email to the user who posted the Question */
+        // First get the email of the sender
+        $sql_sender = "SELECT
+                           user_email
+                       FROM
+                           users
+                       WHERE
+                           '" . $row_question['q_by'] . "' = user_id
+                      ";
+        $result_sender = mysqli_query( $_SESSION['link'], $sql_sender );
+        if( !$result_sender ) {
+          echo 'Failed to load the database.';
+        }
+        else { // Display the question
+          $sender_email = mysqli_fetch_assoc( $result_question )['user_email'];
+
+          $subject = 'Your got a respond to your question on AIO forum!';
+          $message = 'Hello, your question on AIO online forum has gotten a
+                      reply. Please visit the website to check it out!';
+          if( !mail( $sender_email, $subject, $message ) ) {
+            echo 'fail to notify the original post owner';
+          }
+        }
+
       } // End of else !result_reply
     }
   }
   ?>
 </body>
+
+<script type="text/javascript" src="index_bundle.js"></script></body>
