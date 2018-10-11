@@ -13,25 +13,41 @@
 
 </head>
 <body>
-  <div class="welcome-banner">
-    <div id="stick-on-top">
-      <?php
-        include 'connect.php';
-      ?>
-      <h3>NOTE: For questions or concerns that involve personal information such as name,
-          student id, or anything that can identify a specific person, please
-          email us at aio@ucsd.edu through your ucsd email. Emailing is the only
-          secure communication channel, so please help us protect your and others'
-          privacy.</h3>
+  <?php
+    include 'connect.php';
+  ?>
+  <div class="top">
+    <div class="stick-on-top">
+      NOTE: For questions or concerns that involve personal information such as name,
+            student id, or anything that can identify a specific person, please
+            email us at aio@ucsd.edu through your ucsd email. Emailing is the only
+            secure communication channel, so please help us protect your and others'
+            privacy.
     </div>
-    <h1>Welcome to UC San Diego Academic Integrity Online Office</h1>
-    <h3>For general questions, please visit our website first. We might have
-        the answer for you there.</h3>
+
+    <div class="welcome">
+      <h1>UCSD AIO Online</h1>
+      <h3>For general questions, please visit our website first. We might have
+          the answer for you there.</h3>
+    </div>
   </div>
-  <div class="mainBody">
+
+  <div class="main-body">
     <div class="left">
       <!-- Personal account if logged in. If not, it says log in or sign up-->
       <?php if( isset( $_SESSION['signed_in'] ) && $_SESSION['signed_in']) : ?>
+      <script>
+        window.user_signed_in = <?php echo $_SESSION['signed_in'] ?>;
+
+        if( window.user_signed_in ) {
+          window.user_name = <?php echo $_SESSION['user_name'] ?>;
+          window.user_level = <?php echo $_SESSION['user_permission'] ?>;
+        }
+        else {
+          window.user_name = 'guest';
+          window.user_level = 2;
+        }
+      </script>
 
         <div class="logged-in-user">
           Hello, <?php echo $_SESSION['user_name'] ?>.
@@ -55,6 +71,7 @@
             or <a href="signup.php">create an account</a>. </div>
       <?php endif; // End control for logged in or not ?>
     </div>
+
     <div id="middle">
 
    </div>

@@ -8,7 +8,6 @@
 
   <!-- style scripts -->
   <link rel="stylesheet" href="../src/styles/index.css">
-
 </head>
 <body>
   <?php
@@ -96,7 +95,6 @@
       }
       echo '</table>';
     } // End control for retrieving students
-
    ?>
-
+<a href="index.php">Home</a>
 </body>

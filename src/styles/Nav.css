@@ -13,7 +13,7 @@ nav {
   background: #0d2035;
   color: #fff;
   text-align: middle;
-  float: left;
+  width: 100%;
 }
 
 a {
@@ -22,7 +22,6 @@ a {
     padding: 0 16px;
     line-height: inherit;
     cursor: pointer;
-    color: white;
 }
 
 a:visited {
@@ -34,19 +33,25 @@ a:visited {
   line-height: 45px;
   font-weight: 700;
   text-transform: uppercase;
+
+  display: flex;
+  align-items: stretch; /* Default */
+  justify-content: space-between;
+
   list-style: none;
   padding-left: 0;
   margin-top: 0;
   margin-bottom: 0;
 }
 
-li {
-  display: inline-block;
+.nav-menu-item {
+  display: block;
+  flex: 0 1 auto;
   position: relative;
   padding: 16px;
 }
 
-li:hover {
+.nav-menu-item:hover {
   background-color: #00aeef;
   display: inline-block;
 }

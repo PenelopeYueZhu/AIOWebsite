@@ -96,9 +96,7 @@
               }
               echo 'Welcome, ' . $_SESSION['user_name'] .
                    '. <a href="index.php">Home</a>';
-                   
             ?>
-
           <?php endif; ?>
 
         <!-- End control for retrieving information from the database -->
