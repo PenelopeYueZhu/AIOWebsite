@@ -55,7 +55,7 @@ class NavMenu extends Component {
     }
 
     // Prompt the user to sign in or to show their account
-    let normal_option_1 = <SideBarItem name={signIn} address="signin.php"/>
+    let normal_option_1 = <SideBarItem name={signIn} address="signin.html"/>
     let normal_option_2 = <SideBarItem name={createAccount} address="signup.php"/>;
     if( this.state.signed_in && this.state.level == 2) { // Basic access
       normal_option_1 = <SideBarItem name={viewQuestionHistory} address=""/>

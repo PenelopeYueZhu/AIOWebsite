@@ -11,70 +11,38 @@
   <!-- style scripts -->
   <link rel="stylesheet" href="../src/styles/index.css">
 
+  <!-- Linking in bootstrap -->
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+  <!-- jQuery library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!-- Popper JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+  <!-- Latest compiled JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+
 </head>
 <body>
   <?php
     include 'connect.php';
   ?>
-  <div class="top">
-    <div class="stick-on-top">
-      NOTE: For questions or concerns that involve personal information such as name,
-            student id, or anything that can identify a specific person, please
-            email us at aio@ucsd.edu through your ucsd email. Emailing is the only
-            secure communication channel, so please help us protect your and others'
-            privacy.
-    </div>
 
-    <div class="welcome">
-      <h1>UCSD AIO Online</h1>
-      <h3>For general questions, please visit our website first. We might have
-          the answer for you there.</h3>
-    </div>
+  <!-- Head banner -->
+  <div class="jumbotron text-center" style="margin-bottom:0;">
+    <h1 style="font-size: 50px">UCSD AIO Online</h1>
+    <h2>For general questions, please visit our website first. We might have
+       the answer for you there.</p>
+
+    <h2 style="color: red"> NOTE: For questions or concerns that involve personal information such as name,
+             student id, or anything that can identify a specific person, please
+             email us at aio@ucsd.edu through your ucsd email. Emailing is the only
+             secure communication channel, so please help us protect your and others'
+             privacy. </h2>
   </div>
 
-  <div class="main-body">
-    <div class="left">
-      <!-- Personal account if logged in. If not, it says log in or sign up-->
-      <?php if( isset( $_SESSION['signed_in'] ) && $_SESSION['signed_in']) : ?>
-      <script>
-        window.user_signed_in = <?php echo $_SESSION['signed_in'] ?>;
+  <!-- Container for react -->
+  <div id="middle">
 
-        if( window.user_signed_in ) {
-          window.user_name = <?php echo $_SESSION['user_name'] ?>;
-          window.user_level = <?php echo $_SESSION['user_permission'] ?>;
-        }
-        else {
-          window.user_name = 'guest';
-          window.user_level = 2;
-        }
-      </script>
-
-        <div class="logged-in-user">
-          Hello, <?php echo $_SESSION['user_name'] ?>.
-          Not you? <a href="signout.php">Sign out</a>
-          <a>View your question history</a>
-          <a>Update your profile</a>
-
-          <?php if( $_SESSION['user_permission'] <= 1 ) : // If you are peer ?>
-
-            <a>View your reply history</a>
-            <?php if( $_SESSION['user_permission'] == 0 ) : // If you are admin ?>
-              <a href="admin-manage.php">Manage users</a>
-            <?php endif; ?>
-
-          <?php endif; //End control if it's a student or from office?>
-        </div>
-
-      <?php else: ?>
-          <div class="not-logged-in-user">
-            <a href="signin.php">Sign in</a>
-            or <a href="signup.php">create an account</a>. </div>
-      <?php endif; // End control for logged in or not ?>
-    </div>
-
-    <div id="middle">
-
-   </div>
   </div>
 </body>
 <script type="text/javascript" src="index_bundle.js"></script></body>
