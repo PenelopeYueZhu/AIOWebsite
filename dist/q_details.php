@@ -37,143 +37,90 @@
   <div id="middle">
   </div>
 
-  <?php
-  // View an indivial question in detail
-  include 'connect.php';
+  <script>
+    // Getting all the question details here
+    var questionReq = new XMLHttpRequest();
+    questionReq.onload = function () {
+      // Parse the responce text
+      var questionReqArray = JSON.parse( questionReq.responseText );
+      // Now we write the values into the website
 
-  // Display the corresponding question based on which id we get from url
-  $q_id = $_GET['id'];
-  if( !$q_id ) echo 'Problem loading the question, please try again later.';
-  else { // Get all the information about that question
-    $sql = "SELECT
-                q_subject,
-                q_date,
-                q_cat,
-                q_by,
-                q_content
-            FROM
-                questions
-            WHERE q_id = $q_id
-           ";
+      // First write the question
+      document.getElementById("question_title").innerHTML =
+        questionReqArray["title"];
+      document.getElementById("question_content").innerHTML =
+        questionReqArray["content"];
 
-    $result_question = mysqli_query( $_SESSION['link'], $sql );
-    if( !$result_question ) {
-      echo 'Failed to load the database.';
-    }
-    else { // Display the question
-      $row_question = mysqli_fetch_assoc( $result_question );
-      echo '<h1>' . $row_question['q_subject'] . '</h1>';
-      echo '<p>' . $row_question['q_content'] . '<p>';
-    }
-  }
+      // Then we write the replies
+      var numReplies = questionReqArray["numReplies"];
+      var replies = questionReqArray["replies"];
+      var replyTime = questionReqArray["replyTime"];
+      var replyDiv = document.createElement("div");
 
-  /* Display replies, if thre is any */
-  $sql_reply = "SELECT
-                    reply_id,
-                    DATE(reply_date),
-                    reply_by,
-                    reply_content
-                 FROM
-                     replies
-                 WHERE reply_q_id = $q_id
-               ";
-  $result_reply = mysqli_query( $_SESSION['link'], $sql_reply );
-  if( !$result_reply ) echo 'Failed to load the database.';
-  // When there is a reply
-  else if( mysqli_num_rows( $result_reply ) > 0 ) {
-    // Display each reply
-    echo '<table border="0">
-            <tr>
-              <th>Replied on</th>
-              <th>Reply</th>
-            </tr>
-         ';
-    while( $row_reply = mysqli_fetch_assoc( $result_reply ) ){
-      echo '<tr>';
-        echo '<td class="leftpart">';
-          echo $row_reply['DATE(reply_date)'];
-        echo '</td>';
-        echo '<td class="rightpart">';
-          echo $row_reply['reply_content'];
-        echo '</td>';
-      echo '</tr>';
-    }
-    echo '</table>';
-  }
+      // Loop through the questions
+      for( var i = 0 ; i < numReplies ; i++ ) {
+        var pContent = document.createElement('p');
+        // Style this reply paragraph
+        pContent.style.marginLeft = "2em";
 
-  /* Add the box to add new reply */
-  // If the user is not signed in, ask them to sign in to answer Questions
-  if( !( isset($_SESSION['signed_in']) && ($_SESSION['signed_in'] ) ) ) {
-    echo 'You have to sign in to answer a question.';
-    echo '<a href="signin.php">Sign in here</a>';
-    echo 'Do not have an account? <a href="signup.php">Sign up here</a>';
-  }
-  else { // Add the box for user to reply
-    if( $_SERVER['REQUEST_METHOD'] != 'POST'){ // When the user hasn't submitted
-      echo '<h2>Reply</h2>';
-      echo '<form method="post" action="">
-           Reply: <textarea name="q_reply" /></textarea>
-           <input type="submit" value="reply" />
-           </form>
-           ';
-    }
-    else { // When the user submitted
-      $query = "BEGIN WORK;";
-      $result_query = mysqli_query( $_SESSION['link'], $query );
-      if( !$result_query ) echo 'Failed to load the database when trying to
-                               display box.';
+        var tContent = document.createElement('p');
+        // Style this time line
+        tContent.style.marginLeft = "4em";
+        tContent.style.color = "grey";
+        tContent.style.fontSize = "10px";
 
+        var replyText = document.createTextNode( replies[i] );
+        var replyTime = document.createTextNode( replyTime[i]);
+        var divideLine = document.createElement( "hr");
 
-      $sql_new_reply = "INSERT INTO
-                          replies(reply_date, reply_q_id, reply_by,
-                                    reply_content)
-                          VALUES(NOW(),
-                                 '" . $q_id . "',
-                                 '" . $_SESSION['user_id'] . "',
-                                 '" . mysqli_real_escape_string( $_SESSION['link'] ,
-                                                                 $_POST['q_reply']) . "'
-                                )
-                     ";
-      $result_reply = mysqli_query( $_SESSION['link'], $sql_new_reply );
-      // When there is an error that occured in the middle of insertion
-      if( !$result_reply ) {
-        echo 'Failed to load the database.';
-        $query = "ROLLBACK;";
-        $result_query = mysqli_query( $_SESSION['link'], $query );
+        pContent.appendChild( replyText );
+        tContent.appendChild( replyTime );
+        replyDiv.appendChild( pContent );
+        replyDiv.appendChild( tContent );
+        replyDiv.appendChild( divideLine );
       }
-      else {
-        $query = "COMMIT;";
-        $result_query = mysqli_query( $_SESSION['link'], $query );
-        echo 'Your reply has been posted.';
+      document.getElementById("replies").appendChild( replyDiv );
 
-        /* Send an email to the user who posted the Question */
-        // First get the email of the sender
-        $sql_sender = "SELECT
-                           user_email
-                       FROM
-                           users
-                       WHERE
-                           '" . $row_question['q_by'] . "' = user_id
-                      ";
-        $result_sender = mysqli_query( $_SESSION['link'], $sql_sender );
-        if( !$result_sender ) {
-          echo 'Failed to load the database.';
-        }
-        else { // Display the question
-          $sender_email = mysqli_fetch_assoc( $result_question )['user_email'];
-
-          $subject = 'Your got a respond to your question on AIO forum!';
-          $message = 'Hello, your question on AIO online forum has gotten a
-                      reply. Please visit the website to check it out!';
-          if( !mail( $sender_email, $subject, $message ) ) {
-            echo 'fail to notify the original post owner';
-          }
-        }
-
-      } // End of else !result_reply
     }
-  }
-  ?>
+    questionReq.open( "get",
+                      "getQDetail.php?id=" + <?php echo $_GET['id'] ?>);
+
+    questionReq.send();
+  </script>
+
+  <!-- Place to put the question we retrieved -->
+  <h1 id="question_title"> </h1>
+  <p id="question_content" style="margin-left: 2em;"></p>
+
+  <hr>
+
+  <!-- place to put the replies we retrieved -->
+  <div id="replies">
+
+  </div>
+
+  <!-- User can reply -->
+  <?php include 'connect.php' ?>
+
+  <form method="post" action= <?php echo "pushReply.php?id=" . $_GET['id'] ?> >
+    <div class="form-group">
+      <label for="reply"> Add your reply:</label><br>
+      <textarea class="form-control" name="q_reply" style="margin-left: 2em;"/>
+         </textarea>
+    </div>
+
+    <!-- user has to log in to add their own reply -->
+    <?php if( (isset($_SESSION['signed_in']) ) && $_SESSION['signed_in'] ): ?>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    <?php else: ?>
+      <button type="submit" class="btn btn-primary" disabled >
+        Submit
+      </button>
+      <p style="margin-left: 2em;">
+        *Please sign in first to ask a question.*
+      </p>
+    <?php endif; ?>
+  </form>
 </body>
 
 <script type="text/javascript" src="index_bundle.js"></script></body>

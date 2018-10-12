@@ -22,12 +22,12 @@ else {
                 )
           ";
   $result = mysqli_query( $_SESSION['link'], $sql );
-  if( !$result ) {
+  if( !$result ) { // If we can't somehow write to the database, revert 
     echo "An error has occured when trying to load the database";
     $sql = "ROLLBACK;";
     $result = mysqli_query( $_SESSION['link'], $sql );
   }
-  else {
+  else { // Commit the changes to the database
     $sql = "COMMIT;";
     $result = mysqli_query( $_SESSION['link'], $sql );
     echo 'Your question has been posted!';
