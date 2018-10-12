@@ -42,11 +42,11 @@
   <form method="post" action="pushQuestion.php">
     <div class="form-group">
       <label for="subject">Subject:</label>
-      <input type="text" name="q_subject" />
+      <input type="text" name="q_subject" class="form-control" />
     </div>
     <div class="form-group">
       <label for"category">Category:</label>
-      <select name="q_cat">
+      <select class="form-control" name="q_cat">
       <?php
         for( $i = 0 ; $i < count( $_SESSION['categories'] ); $i++ ) {
           echo '<option value="' . ($i+1) .
@@ -58,7 +58,7 @@
     </div>
 
     <div class="form-group">
-      Message: <textarea name="q_content" /></textarea>
+      Message: <textarea class="form-control" name="q_content" /></textarea>
     </div>
 
     <?php if( (isset($_SESSION['signed_in']) ) && $_SESSION['signed_in'] )  : ?>

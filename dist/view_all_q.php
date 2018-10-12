@@ -111,26 +111,41 @@ function getQuestions( $sort_by, $filter_by ) {
 
 // Sorting drop down list
 // When we have not applied the sorting and filter options
-$sorting_option = "qNTO";
-$filter_option = "0";
-//$filter_option = $_POST['filter_by'];
+$sorting_option = $_GET['sort'];
+$filter_option = $_GET['filter'];
 if( $_SERVER['REQUEST_METHOD'] != 'POST') {
   echo '<form class="form-inline" method="post" action="">';
     echo '<label for="sort">Sort by:</label>';
     echo '<select name="sort_by" class="form-control">';
       // display the options
-      echo '<option value="qNTO">Newest Question first</option>';
-      echo '<option value="qOTN">Oldest question first</option>';
+      if( $sorting_option.strcmp( "qNTO") == 0 ) {
+        echo '<option value="qNTO">Newest Question first</option>';
+        echo '<option value="qOTN">Oldest question first</option>';
+      } else {
+        echo '<option value="qOTN">Oldest question first</option>';
+        echo '<option value="qNTO">Newest Question first</option>';
+      }
     echo '</select>';
 
     // Filter drop down list
     echo '<label for="category">Filter by category:</label>';
     echo '<select name="filter_by" class="form-control">';
       // Display all the categories
-      echo '<option value="0">All</option>';
-      for( $i = 0 ; $i < count( $_SESSION['categories'] ); $i++ ) {
-        echo '<option value="' . ($i+1) . '">' . $_SESSION['categories'][$i]
-              . '</option>';
+      if( $filter_option == 0 ) {
+        echo '<option value="0">All</option>';
+        for( $i = 0 ; $i < count( $_SESSION['categories'] ); $i++ ) {
+          echo '<option value="' . ($i+1) . '">' . $_SESSION['categories'][$i]
+                . '</option>';
+        }
+      } else {
+        echo '<option value="' . $filter_option . '">' .
+             $_SESSION['categories'][$filter_option-1] . '</option>';
+        echo '<option value="0">All</option>';
+        for( $i = 0 ; $i < count( $_SESSION['categories'] ); $i++ ) {
+          if ( $i == ($filter_option - 1) ) continue;
+             echo '<option value="' . ($i+1) . '">' . $_SESSION['categories'][$i]
+                  . '</option>';
+          }
       }
   echo '</select>';
 
@@ -140,22 +155,13 @@ if( $_SERVER['REQUEST_METHOD'] != 'POST') {
 }
 else { // When the user do apply a filter or sorting option,
        // Sort and filter the thing
-  $sorting_option = $_POST['sort_by'];
-  $filter_option = $_POST['filter_by'];
-  $url = 'Location: view_q.php?sort=' . $_POST['sort_by'] .
+  $url = 'Location: view_all_q.php?sort=' . $_POST['sort_by'] .
          '&filter=' . $_POST['filter_by'];
   header($url);
 }
 
-$sql = getQuestions( $sorting_option, $filter_option );/*"SELECT
-            q_id, q_subject, q_content, q_date, q_by,
-            user_id, user_name
-        FROM
-            questions
-        LEFT JOIN
-            users
-        ON questions.q_by = users.user_id
-       ";*/
+$sql = getQuestions( $sorting_option, $filter_option );
+
 $result = mysqli_query( $_SESSION['link'], $sql );
 
 // If the result is null

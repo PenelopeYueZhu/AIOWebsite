@@ -91,11 +91,13 @@ class NavMenu extends Component {
         </li>
         <li className="nav-item">
           <a className="nav-link"
-             href="view_all_q.php">Browse All Questions</a>
+             href="view_all_q.php?sort=qNTO&filter=0">Browse All Questions</a>
         </li>
         <li className="nav-item">
           <a className="nav-link"
-             href="askQuestion.php">Ask Us A Question</a>
+             href="askQuestion.php">
+              Ask Us A Question
+          </a>
         </li>
         <li className="nav-item">
           <a className="nav-link"

@@ -33,11 +33,12 @@
     <h2>For general questions, please visit our website first. We might have
        the answer for you there.</p>
 
-    <h2 style="color: red"> NOTE: For questions or concerns that involve personal information such as name,
-             student id, or anything that can identify a specific person, please
-             email us at aio@ucsd.edu through your ucsd email. Emailing is the only
-             secure communication channel, so please help us protect your and others'
-             privacy. </h2>
+    <h2 style="color: red">
+      NOTE: For questions or concerns that involve personal information such as name,
+            student id, or anything that can identify a specific person, please
+            email us at aio@ucsd.edu through your ucsd email. Emailing is the only
+            secure communication channel, so please help us protect your and others'
+            privacy. </h2>
   </div>
 
   <!-- Container for react -->
