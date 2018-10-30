@@ -66,7 +66,7 @@ class NavMenu extends Component {
       normal_option_2 = <SideBarItem name={signOut} address="signout.php"/>;
     }
     else if ( this.state.signed_in && this.state.level == 0 ){ // Admin access
-      normal_option_1 = <SideBarItem name={manage} address="manageUsers.php"/>
+      normal_option_1 = <SideBarItem name={manage} address="admin-manage.php"/>
       normal_option_2 = <SideBarItem name={signOut} address="signout.php"/>;
     }
 

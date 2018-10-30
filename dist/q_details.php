@@ -70,17 +70,16 @@
         tContent.style.fontSize = "10px";
 
         var replyText = document.createTextNode( replies[i] );
-        var replyTime = document.createTextNode( replyTime[i]);
+        var individualReplyTime = document.createTextNode( replyTime[i]);
         var divideLine = document.createElement( "hr");
 
         pContent.appendChild( replyText );
-        tContent.appendChild( replyTime );
+        tContent.appendChild( individualReplyTime );
         replyDiv.appendChild( pContent );
         replyDiv.appendChild( tContent );
         replyDiv.appendChild( divideLine );
       }
       document.getElementById("replies").appendChild( replyDiv );
-
     }
     questionReq.open( "get",
                       "getQDetail.php?id=" + <?php echo $_GET['id'] ?>);
@@ -121,6 +120,36 @@
       </p>
     <?php endif; ?>
   </form>
+
+  <?php if( (isset($_SESSION['signed_in']) ) && $_SESSION['signed_in']
+             && ( $_SESSION['user_permission'] < 2 ) ): ?>
+    <br>
+
+    <script>
+      var statusReq = new XMLHttpRequest();
+      statusReq.onload = function () {
+        var status = statusReq.responseText;
+console.log( "status is " + status );
+        // If it's 1, then the question has been published
+        if( status.localeCompare( "\"1\"" ) == 0 )
+          document.getElementById("status_button").innerHTML = "unpublish";
+        else // Else we publish it
+          document.getElementById("status_button").innerHTML = "publish";
+      }
+
+      statusReq.open( "get",
+                      "getPublishStatus.php?id=" + <?php echo $_GET['id'] ?>);
+
+      statusReq.send();
+    </script>
+
+    <form method="post" action=
+                        <?php echo "toggleQStatus.php?id=" . $_GET['id'] ?> >
+      <button type="submit" class="btn btn-outline-primary" id="status_button">
+      </button>
+    </form>
+  <?php endif; ?>
+
 </body>
 
 <script type="text/javascript" src="index_bundle.js"></script></body>

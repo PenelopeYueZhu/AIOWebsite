@@ -41,18 +41,49 @@
     // Getting all the question details here
     var allQReq = new XMLHttpRequest();
     allQReq.onload = function () {
-      console.log( allQReq.responseText );
 
       // Parse the responce text
       var allQReqArray = JSON.parse( allQReq.responseText );
 
       // Now we write the values into the website
+      var table = document.getElementById("allQTable");
 
-      // Then we write the replies
+      // If we have admin permission
+      if( "privateQId" in allQReqArray ) {
+        var privateQTimes = allQReqArray["privateQTimes"];
+        var privateQIds = allQReqArray["privateQId"];
+        var privateQTitle = allQReqArray["privateQTitle"];
+
+        for( var i = 0 ; i < privateQTimes.length ; i++ ) {
+          var tr = document.createElement('tr');
+          tr.className = 'table-primary';
+
+          // The time cell of the table
+          var tdTime = document.createElement('td');
+          var qTime = document.createTextNode( privateQTimes[i]);
+
+          // The title cell of the table
+          var tdTitle = document.createElement('td');
+          var qTitle = document.createTextNode( privateQTitle[i] );
+
+          // The link to the details of the question
+          var address = document.createElement('a')
+          address.setAttribute("href", "q_details.php?id=" + privateQIds[i]);
+
+          address.appendChild( qTitle );
+          tdTitle.appendChild( address );
+          tdTime.appendChild( qTime );
+
+          tr.appendChild( tdTime );
+          tr.appendChild( tdTitle );
+
+          table.appendChild( tr );
+        }
+      }
+
       var qTitles = allQReqArray["qTitles"];
       var qIds = allQReqArray["qId"];
       var qTimes = allQReqArray["qTimes"];
-      var table = document.getElementById("allQTable");
 
       // Loop through the questions
       for( var i = 0 ; i < qTimes.length ; i++ ) {
