@@ -10,6 +10,8 @@ $question_details; // The array for question details
 $title; $content; $numReplies = 0; $replyContent = array();
 $replyTime = array();
 $error;
+$publish_status;
+
 if( !$q_id )
   $question_details["error"] =
     'Problem loading the question, please try again later.';
@@ -19,7 +21,8 @@ else { // Get all the information about that question
               q_date,
               q_cat,
               q_by,
-              q_content
+              q_content,
+              publish_status
           FROM
               questions
           WHERE q_id = $q_id
@@ -33,6 +36,7 @@ else { // Get all the information about that question
     $row_question = mysqli_fetch_assoc( $result_question );
     $title = $row_question['q_subject'];
     $content = $row_question['q_content'];
+    $publish_status = $row_question['publish_status'];
   }
 }
 
@@ -66,7 +70,8 @@ $question_details["content"] = $content;
 $question_details["numReplies"] = $numReplies;
 $question_details["replyTime"] = $replyTime;
 $question_details["replies"] = $replyContent;
+$question_details["publish_status"] = $publish_status;
 
 echo json_encode( $question_details );
 
- ?>
+?>
