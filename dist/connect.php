@@ -10,12 +10,15 @@ $FINAL_SESSION_TIME_IN_MS = 216000;
 $FINAL_SESSION_TIME_IN_S = 3600;
 
 // Server should keep session data for at least 1 hour
-ini_set( 'session.gc_maxlifetime', $FINAL_SESSION_TIME_IN_MS );
+//ini_set( 'session.gc_maxlifetime', $FINAL_SESSION_TIME_IN_MS );
 
 // Each client should remember their session id for at least an hour
-session_set_cookie_params( $FINAL_SESSION_TIME_IN_S );
+//session_set_cookie_params( $FINAL_SESSION_TIME_IN_S );
 
-session_start();
+//if( !isset( $_SESSION['connected'] )|| !$_SESSION['connected'] ) {
+  session_start();
+  //$_SESSION['connected'] = true;
+//}
 
 // Now set an upper bound for session
 $now = time();

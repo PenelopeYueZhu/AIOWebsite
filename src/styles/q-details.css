@@ -1,0 +1,18 @@
+.category-tag {
+  border-radius: 3px;
+  display: inline-block;
+  font-size: 15px;
+  color: #8181b1;
+  background-color: rgb(224, 224, 235);
+  margin: 0px 5px;
+}
+
+.reply-content {
+  margin-left: 2em;
+}
+
+.reply-time {
+  margin-left: 4em;
+  color: grey;
+  font-size: 10px;
+}

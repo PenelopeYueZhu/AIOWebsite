@@ -7,7 +7,8 @@ include 'connect.php';
 // Get the id of the question
 $q_id = $_GET['id'];
 $question_details; // The array for question details
-$title; $content; $numReplies = 0; $replyContent = array();
+$title; $category; $content; $numReplies = 0;
+$replyContent = array();
 $replyTime = array();
 $error;
 $publish_status;
@@ -35,6 +36,7 @@ else { // Get all the information about that question
   else { // Display the question
     $row_question = mysqli_fetch_assoc( $result_question );
     $title = $row_question['q_subject'];
+    $category = intval( $row_question['q_cat'] ) - 1;
     $content = $row_question['q_content'];
     $publish_status = $row_question['publish_status'];
   }
@@ -65,6 +67,7 @@ else if( mysqli_num_rows( $result_reply ) > 0 ) {
 }
 
 // Encode all the answers and send it to
+$question_details["category"] = $_SESSION["categories"][$category];
 $question_details["title"] = $title;
 $question_details["content"] = $content;
 $question_details["numReplies"] = $numReplies;

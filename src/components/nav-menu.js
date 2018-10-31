@@ -45,24 +45,11 @@ class NavMenu extends Component {
     const viewProfile = "Update your profile";
     const manage = "Manager all users";
 
-    // Determine what options user has based on their permission
-    let special_option = null;
-    if( this.state.signed_in && this.state.level < 1 ) {
-      special_option = <SideBarItem name="Manage Users" address="manageUsers.php" />;
-    }
-    else if( this.state.signed_in && this.state.level < 2 ) {
-      special_option = <SideBarItem name="View Your Replies" address="" />;
-    }
-
     // Prompt the user to sign in or to show their account
     let normal_option_1 = <SideBarItem name={signIn} address="signin.html"/>
     let normal_option_2 = <SideBarItem name={createAccount} address="signup.php"/>;
-    if( this.state.signed_in && this.state.level == 2) { // Basic access
-      normal_option_1 = <SideBarItem name={viewQuestionHistory} address=""/>
-      normal_option_2 = <SideBarItem name={signOut} address="signout.php"/>;
-    }
-    else if( this.state.signed_in && this.state.level == 1 ) { // Peer access
-      normal_option_1 = <SideBarItem name={viewQuestionHistory} address=""/>
+    if( this.state.signed_in && this.state.level != 0) { // non-admin access
+      normal_option_1 = <SideBarItem name={viewQuestionHistory} address="viewUserQ.php"/>
       normal_option_2 = <SideBarItem name={signOut} address="signout.php"/>;
     }
     else if ( this.state.signed_in && this.state.level == 0 ){ // Admin access
@@ -78,7 +65,6 @@ class NavMenu extends Component {
             Hello, {this.state.name}
           </a>
           <div className="dropdown-menu">
-            {special_option}
             {normal_option_1}
             {normal_option_2}
           </div>
