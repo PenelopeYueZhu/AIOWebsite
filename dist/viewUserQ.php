@@ -51,61 +51,6 @@
       // Now we write the values into the website
       var table = document.getElementById("allQTable");
 
-      // If we have admin permission
-      if( "privateQId" in allQReqArray ) {
-        var privateQTimes = allQReqArray["privateQTimes"];
-        var privateQIds = allQReqArray["privateQId"];
-        var privateQTitle = allQReqArray["privateQTitle"];
-        var privateQContent = allQReqArray["privateContent"];
-        var privateQCat = allQReqArray["privateCat"];
-
-        for( var i = 0 ; i < privateQTimes.length ; i++ ) {
-          var tr = document.createElement('tr');
-          tr.className = 'table-primary';
-
-          // The time cell of the table
-          var tdTime = document.createElement('td');
-          var qTime = document.createTextNode( privateQTimes[i]);
-
-          // The title cell of the table
-          var tdTitle = document.createElement('td');
-          var qTitle = document.createTextNode( privateQTitle[i] );
-          // Create the category tag
-          var category = document.createElement('h6');
-          category.innerHTML = privateQCat[i];
-
-          // The link to the details of the question
-          var address = document.createElement('a')
-          address.setAttribute("href", "q_details.php?id=" + privateQIds[i]);
-
-          // The preview cell of the table
-          var tdContent = document.createElement('td');
-
-          var pContent = document.createElement('p');
-          pContent.className = "previewQ";
-
-          // The link to the details of the question
-          var preview_address = document.createElement('a')
-          preview_address.setAttribute("href",
-                                       "q_details.php?id=" + privateQIds[i]);
-          preview_address.appendChild(
-                                document.createTextNode( privateQContent[i] ) );
-          pContent.appendChild( preview_address );
-
-          address.appendChild( category );
-          address.appendChild( qTitle );
-          tdTitle.appendChild( address );
-          tdTime.appendChild( qTime );
-          tdContent.appendChild( pContent );
-
-          tr.appendChild( tdTime );
-          tr.appendChild( tdTitle );
-          tr.appendChild( tdContent );
-
-          table.appendChild( tr );
-        }
-      }
-
       var qTitles = allQReqArray["qTitles"];
       var qCats = allQReqArray["category"];
       var qContent = allQReqArray["qContent"];
@@ -159,7 +104,7 @@
       }
 
     }
-    allQReq.open( "get", "getAllQ.php");
+    allQReq.open( "get", "getUserQ.php");
 
     allQReq.send();
   </script>

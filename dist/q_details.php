@@ -18,8 +18,15 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
   <!-- Latest compiled JavaScript -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+
+  <!-- my own css -->
+  <link rel="stylesheet" href="../src/styles/q-details.css">
+
 </head>
 <body>
+  <!-- Peers and admin can reply  -->
+  <?php include 'connect.php'; ?>
+
   <!-- Head banner -->
   <div class="jumbotron text-center" style="margin-bottom:0;">
     <h1 style="font-size: 50px">UCSD AIO Online</h1>
@@ -46,8 +53,14 @@
       // Now we write the values into the website
 
       // First write the question
-      document.getElementById("question_title").innerHTML =
-        questionReqArray["title"];
+      // add a category tag
+      var category = document.createElement('h6');
+      category.className = "category-tag";
+      category.innerHTML = questionReqArray["category"];
+
+      document.getElementById("question_title").appendChild( category );
+      document.getElementById("question_title").appendChild(
+                        document.createTextNode(questionReqArray["title"] ) );
       document.getElementById("question_content").innerHTML =
         questionReqArray["content"];
 
@@ -61,16 +74,15 @@
       for( var i = 0 ; i < numReplies ; i++ ) {
         var pContent = document.createElement('p');
         // Style this reply paragraph
-        pContent.style.marginLeft = "2em";
+        pContent.className = "reply-content";
 
         var tContent = document.createElement('p');
         // Style this time line
-        tContent.style.marginLeft = "4em";
-        tContent.style.color = "grey";
-        tContent.style.fontSize = "10px";
+        tContent.className = "reply-time";
 
         var replyText = document.createTextNode( replies[i] );
-        var individualReplyTime = document.createTextNode( replyTime[i]);
+        var individualReplyTime =
+          document.createTextNode( "AIO Office  " +  replyTime[i]);
         var divideLine = document.createElement( "hr");
 
         pContent.appendChild( replyText );
@@ -98,8 +110,9 @@
 
   </div>
 
-  <!-- User can reply -->
-  <?php include 'connect.php' ?>
+  <!-- You have to have peer access to reply -->
+  <?php if( (isset($_SESSION['signed_in']) ) && $_SESSION['signed_in']
+             && $_SESSION['user_permission'] < 2 ): ?>
 
   <form method="post" action= <?php echo "pushReply.php?id=" . $_GET['id'] ?> >
     <div class="form-group">
@@ -108,47 +121,92 @@
          </textarea>
     </div>
 
-    <!-- user has to log in to add their own reply -->
-    <?php if( (isset($_SESSION['signed_in']) ) && $_SESSION['signed_in'] ): ?>
       <button type="submit" class="btn btn-primary">Submit</button>
-    <?php else: ?>
-      <button type="submit" class="btn btn-primary" disabled >
-        Submit
-      </button>
-      <p style="margin-left: 2em;">
-        *Please sign in first to ask a question.*
-      </p>
-    <?php endif; ?>
   </form>
 
-  <?php if( (isset($_SESSION['signed_in']) ) && $_SESSION['signed_in']
-             && ( $_SESSION['user_permission'] < 2 ) ): ?>
-    <br>
+  <br>
 
-    <script>
-      var statusReq = new XMLHttpRequest();
-      statusReq.onload = function () {
-        var status = statusReq.responseText;
-console.log( "status is " + status );
-        // If it's 1, then the question has been published
-        if( status.localeCompare( "\"1\"" ) == 0 )
-          document.getElementById("status_button").innerHTML = "unpublish";
-        else // Else we publish it
-          document.getElementById("status_button").innerHTML = "publish";
+  <script>
+    var catReq = new XMLHttpRequest();
+    catReq.onload = function () {
+      var catsArray = JSON.parse( catReq.responseText );
+      // Now we write the values into the website
+
+      // Get all the categories
+      var allCats = catsArray["categories"];
+      var errors = catsArray["errors"];
+      var id = catsArray["catsId"];
+
+      // TODO Deal with errors
+
+      // Loop through the cats and display them
+      for( var i = 0 ; i < allCats.length ; i++ ) {
+        var checkDiv = document.createElement('div');
+        checkDiv.className = "form-check form-check-inline";
+
+        // Input box
+        var input = document.createElement('input');
+        input.className = "form-check-input";
+        // Set all the attributes
+        input.setAttribute("type", "checkbox");
+        input.setAttribute("name", i)
+        input.setAttribute("value", parseInt( id[i]) );
+        input.setAttribute("id", i);
+
+        // Label of the input box
+        var label = document.createElement('label');
+        label.className = "form-check-label";
+        // Set all the attributes
+        input.setAttribute("for", i);
+
+        label.innerHTML =  allCats[i];
+
+        // Group all elements together
+        checkDiv.appendChild( input );
+        checkDiv.appendChild( label );
+        document.getElementById("select-cats").appendChild( checkDiv );
       }
+    }
 
-      statusReq.open( "get",
-                      "getPublishStatus.php?id=" + <?php echo $_GET['id'] ?>);
+    catReq.open( "get", "getCategories.php");
 
-      statusReq.send();
-    </script>
+    catReq.send();
+  </script>
+  <!-- Assign categories by peers -->
+  <form id="assign-cats" method="post"
+        action=<?php echo "pushQCategory.php?id=" . $_GET['id'] ?>>
+    <div id="select-cats"></div>
 
-    <form method="post" action=
-                        <?php echo "toggleQStatus.php?id=" . $_GET['id'] ?> >
-      <button type="submit" class="btn btn-outline-primary" id="status_button">
-      </button>
-    </form>
-  <?php endif; ?>
+    <button type="submit" class="btn btn-outline-primary">
+        Assign Category
+    </button>
+  </form>
+
+  <br>
+
+  <script>
+    var statusReq = new XMLHttpRequest();
+    statusReq.onload = function () {
+      var status = statusReq.responseText;
+      // If it's 1, then the question has been published
+      if( status.localeCompare( "\"1\"" ) == 0 )
+        document.getElementById("status_button").innerHTML = "unpublish";
+      else // Else we publish it
+        document.getElementById("status_button").innerHTML = "publish";
+    }
+
+    statusReq.open( "get",
+                    "getPublishStatus.php?id=" + <?php echo $_GET['id'] ?>);
+
+    statusReq.send();
+  </script>
+
+  <form method="post"
+        action=<?php echo "toggleQStatus.php?id=" . $_GET['id'] ?> >
+    <button type="submit" class="btn btn-outline-primary" id="status_button">
+    </button>
+  </form>
+<?php endif; ?>
 
 </body>
 

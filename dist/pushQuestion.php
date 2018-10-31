@@ -16,7 +16,7 @@ else {
                                              $_POST['q_subject']) . "',
                  NOW(),
                  '" . mysqli_real_escape_string($_SESSION['link'],
-                                             $_POST['q_cat']) . "',
+                                              $_POST['q_cat']) . "',
                  '" . $_SESSION['user_id'] . "',
                  '" . mysqli_real_escape_string($_SESSION['link'],
                                              $_POST['q_content']) . "',

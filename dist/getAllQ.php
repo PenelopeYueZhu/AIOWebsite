@@ -3,20 +3,20 @@
 // And filtering requirement
 
 include 'connect.php';
-
-// First function that displays the
-
-// The return values
 $error = '';
+$categories = array();
 $qTimes = array();
 $qId = array();
 $qTitles = array();
+$qContent = array();
 $allQ = array();
 
 // only used for admins
 $privateQTimes = array();
 $privateQId = array();
 $privateQTitle = array();
+$privateCat = array();
+$privateContent = array();
 
 // Only for admins
 if( isset($_SESSION['user_permission'] ) &&
@@ -30,12 +30,17 @@ if( isset($_SESSION['user_permission'] ) &&
     array_push( $privateQTimes, $row_private['q_date'] );
     array_push( $privateQId, $row_private['q_id']);
     array_push( $privateQTitle, $row_private['q_subject'] );
+    array_push( $privateContent, $row_private['q_content'] );
+    array_push($privateCat,
+               $_SESSION["categories"][intval($row_private['q_cat']) - 1]);
   }
 
   // Push them into allQ for return
   $allQ['privateQTimes'] = $privateQTimes;
   $allQ['privateQId'] = $privateQId;
   $allQ['privateQTitle'] = $privateQTitle;
+  $allQ['privateContent'] = $privateContent;
+  $allQ['privateCat'] = $privateCat;
 }
 
 // Default values for the form
@@ -60,6 +65,8 @@ else { // Get all the questions into the array
     array_push( $qTimes, $row['q_date'] );
     array_push( $qId, $row['q_id']);
     array_push( $qTitles, $row['q_subject'] );
+    array_push( $qContent, $row['q_content'] );
+    array_push($categories, $_SESSION["categories"][intval($row['q_cat']) - 1]);
   }
 }
 
@@ -67,6 +74,8 @@ else { // Get all the questions into the array
 $allQ['qTimes'] = $qTimes;
 $allQ['qId'] = $qId;
 $allQ['qTitles'] = $qTitles;
+$allQ['qContent'] = $qContent;
+$allQ['category'] = $categories;
 $allQ['error'] = $error;
 
 echo json_encode($allQ);
@@ -78,7 +87,7 @@ function getPublishedQuestions( $sort_by, $filter_by ) {
     switch( $sort_by ) {
       case "qNTO": // Newest first
         $sql_return = "SELECT
-                            q_id, q_subject, q_content, q_date, q_by,
+                            q_id, q_subject, q_content, q_date, q_by, q_cat,
                             user_id, user_name, publish_status
                         FROM
                             questions
@@ -92,7 +101,7 @@ function getPublishedQuestions( $sort_by, $filter_by ) {
         break;
       case "qOTN": // Oldest first
         $sql_return = "SELECT
-                            q_id, q_subject, q_content, q_date, q_by,
+                            q_id, q_subject, q_content, q_date, q_by, q_cat,
                             user_id, user_name, publish_status
                         FROM
                             questions
@@ -107,7 +116,7 @@ function getPublishedQuestions( $sort_by, $filter_by ) {
         break;
       default: // Default is newest first:
         $sql_return = "SELECT
-                            q_id, q_subject, q_content, q_date, q_by,
+                            q_id, q_subject, q_content, q_date, q_by, q_cat,
                             user_id, user_name, publish_status
                         FROM
                             questions
@@ -126,7 +135,7 @@ function getPublishedQuestions( $sort_by, $filter_by ) {
     switch( $sort_by ) {
       case "qNTO":
         $sql_return = "SELECT
-                            q_id, q_subject, q_content, q_date, q_by,
+                            q_id, q_subject, q_content, q_date, q_by, q_cat,
                             user_id, user_name, publish_status
                         FROM
                             questions
@@ -140,7 +149,7 @@ function getPublishedQuestions( $sort_by, $filter_by ) {
           break;
       case "qOTN":
         $sql_return = "SELECT
-                           q_id, q_subject, q_content, q_date, q_by,
+                           q_id, q_subject, q_content, q_date, q_by, q_cat,
                            user_id, user_name, publish_status
                         FROM
                             questions
@@ -160,7 +169,7 @@ function getPublishedQuestions( $sort_by, $filter_by ) {
 
 function getPrivateQuestions() {
   $sql = "SELECT
-              q_id, q_subject, q_content, q_date, q_by,
+              q_id, q_subject, q_content, q_date, q_by, q_cat,
               user_id, user_name, publish_status
           FROM
               questions

@@ -1,0 +1,29 @@
+table {
+    width: 100%;
+}
+td {
+    width: 33.3%;
+    max-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+td.previewQ {
+    width: 40%;
+}
+
+h6 {
+  border-radius: 2px;
+  display: inline-block;
+  font-size: 10px;
+  color: #8181b1;
+  background-color: rgb(224, 224, 235);
+  margin: 0px 3px;
+}
+
+.previewQ {
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}

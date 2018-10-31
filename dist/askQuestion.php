@@ -45,19 +45,6 @@
       <input type="text" name="q_subject" class="form-control" />
     </div>
     <div class="form-group">
-      <label for"category">Category:</label>
-      <select class="form-control" name="q_cat">
-      <?php
-        for( $i = 0 ; $i < count( $_SESSION['categories'] ); $i++ ) {
-          echo '<option value="' . ($i+1) .
-               '">' . $_SESSION['categories'][$i]
-               . '</option>';
-        }
-      ?>
-      </select>
-    </div>
-
-    <div class="form-group">
       Message: <textarea class="form-control" name="q_content" /></textarea>
     </div>
 

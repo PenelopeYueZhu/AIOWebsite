@@ -23,10 +23,6 @@
 
 </head>
 <body>
-  <?php
-    include 'connect.php';
-  ?>
-
   <!-- Head banner -->
   <div class="jumbotron text-center" style="margin-bottom:0;">
     <h1 style="font-size: 50px">UCSD AIO Online</h1>
