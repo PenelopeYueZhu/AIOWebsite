@@ -30,7 +30,7 @@ include 'connect.php';
               AND
                   user_pw =
                     '" . sha1( $_POST['user_pw'] ) . "'
-             ";
+             "; //'
       $result = mysqli_query( $_SESSION['link'], $sql );
 
       if( !$result ) {

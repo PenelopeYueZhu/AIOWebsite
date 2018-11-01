@@ -2,11 +2,12 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang = "nl" lang = "nl">
 <head>
+  <meta charset="utf-8"/>
   <meta httl-equiv="Content-Type" content = "text/html; charset=UTF-8" />
   <meta name="description" content="A forum for UCSD students and faculties to
                                     ask questions about integrity."/>
   <meta name="keywords" content="UCSD, integrity, question, realtime"/>
-  <title>Integrity Overflow - Ask Us A Question</title>
+  <title>Integrity Overflow</title>
 
   <!-- Linking in bootstrap -->
   <!-- Latest compiled and minified CSS -->
@@ -20,8 +21,6 @@
 
 </head>
 <body>
-  <?php include 'connect.php' ?>
-
   <!-- Head banner -->
   <div class="jumbotron text-center" style="margin-bottom:0;">
     <h1 style="font-size: 50px">UCSD AIO Online</h1>
@@ -36,47 +35,25 @@
   </div>
 
   <div id="middle">
-
   </div>
-
-  <form method="post" action="pushQuestion.php" id="ask-form">
+  <form method="post" action="signUserUp.php" >
     <div class="form-group">
-      <label for="subject">Subject:</label>
-      <input type="text" name="q_subject" class="form-control" />
+      <label for="user_name">Username:</label>
+      <input type="user_name" class="form-control" id="name" name="user_name">
     </div>
     <div class="form-group">
-      Message: <textarea class="form-control" name="q_content" /></textarea>
+      <label for="pwd">Password:</label>
+      <input type="password" class="form-control" id="pwd" name="user_pw">
     </div>
-
-    <script>
-      var signedInReq = new XMLHttpRequest(); // Request the data from signin script
-      signedInReq.onload = function () {
-        var button = $("#submit-question");
-        // Parse the responce text
-        var userDataArray = JSON.parse( signedInReq.responseText );
-        var signed_in = userDataArray[0];
-
-        // If user is signed in allow them to submit the question
-        if( parseInt(signed_in) != 0 ) {
-          button.prop('disabled', false);
-        } else {
-          button.prop('disabled', true);
-
-          $("#ask-form").append(
-               document.createTextNode( "Please sign in to ask a question.") );
-        }
-
-      }
-
-      signedInReq.open( "get", "checkSignedIn.php" );
-
-      signedInReq.send();
-
-    </script>
-    <button type="submit" class="btn btn-primary" id="submit-question">
-      Submit
-    </button>
+    <div class="form-group">
+      <label for="pwd">Password again:</label>
+      <input type="password" class="form-control" id="pwd-check" name="user_pw_check">
+    </div>
+    <div class="form-group">
+      <label for="pwd">Email:</label>
+      <input type="email" class="form-control" id="email" name="user_email">
+    </div>
+    <button type="submit" class="btn btn-primary">Sign up</button>
   </form>
-</body>
 
 <script type="text/javascript" src="index_bundle.js"></script></body>

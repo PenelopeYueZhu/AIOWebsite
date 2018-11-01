@@ -153,5 +153,5 @@
     </thead>
   </table>
 
+<script type="text/javascript" src="index_bundle.js"></script>
 </body>
-<script type="text/javascript" src="index_bundle.js"></script></body>

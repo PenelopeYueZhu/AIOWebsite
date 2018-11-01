@@ -3,6 +3,8 @@
 // And filtering requirement
 
 include 'connect.php';
+
+// arrays to store different kinds of information we need
 $error = '';
 $categories = array();
 $qTimes = array();
@@ -22,7 +24,8 @@ $privateContent = array();
 if( isset($_SESSION['user_permission'] ) &&
      $_SESSION['user_permission'] < 2 ) {
 
-  $sql_private = getPrivateQuestions();
+  // Get private quesitons that are not published yet
+  $sql_private = getPrivateQuestions( );
   $result_private =  mysqli_query( $_SESSION['link'], $sql_private );
 
   // Get all the entries into the array
@@ -43,16 +46,8 @@ if( isset($_SESSION['user_permission'] ) &&
   $allQ['privateCat'] = $privateCat;
 }
 
-// Default values for the form
-$sorting_option = "qNTO";
-$filter_option = 0;
-// When we have applied the sorting and filter options
-if( isset( $_POST['sort_by'] ) ) {
-  $sorting_option = $_POST['sort_by'];
-  $filter_option = $_POST['filter_by'];
-}
-
-$sql_allQ = getPublishedQuestions( $sorting_option, $filter_option );
+// Get the all published questions for everyone
+$sql_allQ = getPublishedQuestions(  );
 
 $result_allQ = mysqli_query( $_SESSION['link'], $sql_allQ );
 
@@ -81,93 +76,26 @@ $allQ['error'] = $error;
 echo json_encode($allQ);
 
 /* Function to grab questions based on filter and sorting options */
-function getPublishedQuestions( $sort_by, $filter_by ) {
+function getPublishedQuestions(  ) {
   $sql_return = null;
-  if( $filter_by == 0 ) {
-    switch( $sort_by ) {
-      case "qNTO": // Newest first
-        $sql_return = "SELECT
-                            q_id, q_subject, q_content, q_date, q_by, q_cat,
-                            user_id, user_name, publish_status
-                        FROM
-                            questions
-                        LEFT JOIN
-                            users
-                        ON questions.q_by = users.user_id
-                        WHERE questions.publish_status = 1
-                        ORDER BY
-                            q_id DESC
-                      ";
-        break;
-      case "qOTN": // Oldest first
-        $sql_return = "SELECT
-                            q_id, q_subject, q_content, q_date, q_by, q_cat,
-                            user_id, user_name, publish_status
-                        FROM
-                            questions
-                        LEFT JOIN
-                            users
-                        ON questions.q_by = users.user_id
-                        WHERE publish_status = 1
-
-                        ORDER BY
-                            q_id ASC
-                      ";
-        break;
-      default: // Default is newest first:
-        $sql_return = "SELECT
-                            q_id, q_subject, q_content, q_date, q_by, q_cat,
-                            user_id, user_name, publish_status
-                        FROM
-                            questions
-                        LEFT JOIN
-                            users
-                        ON questions.q_by = users.user_id
-                        WHERE publish_status = 1
-
-                        ORDER BY
-                            q_id DESC
-                      ";
-        break;
-    }
-  } else {
-    // Now get all the qeustions based on the filter option
-    switch( $sort_by ) {
-      case "qNTO":
-        $sql_return = "SELECT
-                            q_id, q_subject, q_content, q_date, q_by, q_cat,
-                            user_id, user_name, publish_status
-                        FROM
-                            questions
-                        LEFT JOIN
-                            users
-                        ON questions.q_by = users.user_id
-                        WHERE q_cat = $filter_by AND publish_status = 1
-                        ORDER BY
-                           q_id DESC
-                      ";
-          break;
-      case "qOTN":
-        $sql_return = "SELECT
-                           q_id, q_subject, q_content, q_date, q_by, q_cat,
-                           user_id, user_name, publish_status
-                        FROM
-                            questions
-                        LEFT JOIN
-                            users
-                        ON questions.q_by = users.user_id
-                        WHERE q_cat = $filter_by AND publish_status = 1
-                        ORDER BY
-                            q_id ASC
-                       ";
-        break;
-    } // filter_by has a category
-  }
+  $sql_return = "SELECT
+                      q_id, q_subject, q_content, q_date, q_by, q_cat,
+                      user_id, user_name, publish_status
+                  FROM
+                      questions
+                  LEFT JOIN
+                      users
+                  ON questions.q_by = users.user_id
+                  WHERE questions.publish_status = 1
+                  ORDER BY
+                      q_id DESC
+                ";
 
   return $sql_return;
 }
 
-function getPrivateQuestions() {
+function getPrivateQuestions(  ) {
+  $sql = null;
   $sql = "SELECT
               q_id, q_subject, q_content, q_date, q_by, q_cat,
               user_id, user_name, publish_status

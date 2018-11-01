@@ -10,7 +10,7 @@ class NavMenu extends Component {
     this.state = { signed_in: 0,
                    level: 3,
                    name: 'guest' };
-    console.log( this.state.name );
+    //console.log( this.state.name );
 
     // Default value for react is not signed in
     var component = this;
@@ -19,7 +19,7 @@ class NavMenu extends Component {
     userDataReq.onload = function () {
       // Parse the responce text
       var userDataArray = JSON.parse( userDataReq.responseText );
-      console.log( userDataArray[1]);
+      //console.log( userDataArray[1]);
 
       // Update the component so we rerender with fetched username and
       // Permission level
@@ -47,7 +47,7 @@ class NavMenu extends Component {
 
     // Prompt the user to sign in or to show their account
     let normal_option_1 = <SideBarItem name={signIn} address="signin.html"/>
-    let normal_option_2 = <SideBarItem name={createAccount} address="signup.php"/>;
+    let normal_option_2 = <SideBarItem name={createAccount} address="signup.html"/>;
     if( this.state.signed_in && this.state.level != 0) { // non-admin access
       normal_option_1 = <SideBarItem name={viewQuestionHistory} address="viewUserQ.php"/>
       normal_option_2 = <SideBarItem name={signOut} address="signout.php"/>;
@@ -105,7 +105,7 @@ class NavMenu extends Component {
         </li>
       </ul>
       </nav>
-    )
+    );
   }
 }
 
