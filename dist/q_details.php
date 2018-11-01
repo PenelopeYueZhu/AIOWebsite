@@ -44,59 +44,7 @@
   <div id="middle">
   </div>
 
-  <script>
-    // Getting all the question details here
-    var questionReq = new XMLHttpRequest();
-    questionReq.onload = function () {
-      // Parse the responce text
-      var questionReqArray = JSON.parse( questionReq.responseText );
-      // Now we write the values into the website
-
-      // First write the question
-      // add a category tag
-      var category = document.createElement('h6');
-      category.className = "category-tag";
-      category.innerHTML = questionReqArray["category"];
-
-      document.getElementById("question_title").appendChild( category );
-      document.getElementById("question_title").appendChild(
-                        document.createTextNode(questionReqArray["title"] ) );
-      document.getElementById("question_content").innerHTML =
-        questionReqArray["content"];
-
-      // Then we write the replies
-      var numReplies = questionReqArray["numReplies"];
-      var replies = questionReqArray["replies"];
-      var replyTime = questionReqArray["replyTime"];
-      var replyDiv = document.createElement("div");
-
-      // Loop through the questions
-      for( var i = 0 ; i < numReplies ; i++ ) {
-        var pContent = document.createElement('p');
-        // Style this reply paragraph
-        pContent.className = "reply-content";
-
-        var tContent = document.createElement('p');
-        // Style this time line
-        tContent.className = "reply-time";
-
-        var replyText = document.createTextNode( replies[i] );
-        var individualReplyTime =
-          document.createTextNode( "AIO Office  " +  replyTime[i]);
-        var divideLine = document.createElement( "hr");
-
-        pContent.appendChild( replyText );
-        tContent.appendChild( individualReplyTime );
-        replyDiv.appendChild( pContent );
-        replyDiv.appendChild( tContent );
-        replyDiv.appendChild( divideLine );
-      }
-      document.getElementById("replies").appendChild( replyDiv );
-    }
-    questionReq.open( "get",
-                      "getQDetail.php?id=" + <?php echo $_GET['id'] ?>);
-
-    questionReq.send();
+  <script src="js/qDetail.js">
   </script>
 
   <!-- Place to put the question we retrieved -->
@@ -114,16 +62,15 @@
   <?php if( (isset($_SESSION['signed_in']) ) && $_SESSION['signed_in']
              && $_SESSION['user_permission'] < 2 ): ?>
 
-  <form method="post" action= <?php echo "pushReply.php?id=" . $_GET['id'] ?> >
+
+  <form method="post" id="post-reply" action="" >
     <div class="form-group">
       <label for="reply"> Add your reply:</label><br>
       <textarea class="form-control" name="q_reply" style="margin-left: 2em;"/>
          </textarea>
     </div>
-
-      <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="submit" class="btn btn-primary">Submit</button>
   </form>
-
   <br>
 
   <script>
@@ -173,8 +120,8 @@
     catReq.send();
   </script>
   <!-- Assign categories by peers -->
-  <form id="assign-cats" method="post"
-        action=<?php echo "pushQCategory.php?id=" . $_GET['id'] ?>>
+  <form id="assign-cats" method="post" id="post-cat"
+        action="">
     <div id="select-cats"></div>
 
     <button type="submit" class="btn btn-outline-primary">
@@ -196,7 +143,7 @@
     }
 
     statusReq.open( "get",
-                    "getPublishStatus.php?id=" + <?php echo $_GET['id'] ?>);
+                    "getPublishStatus.php" + window.location.search);
 
     statusReq.send();
   </script>

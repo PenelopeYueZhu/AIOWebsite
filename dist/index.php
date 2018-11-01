@@ -45,5 +45,4 @@
   <div id="middle">
 
   </div>
-</body>
 <script type="text/javascript" src="index_bundle.js"></script></body>
