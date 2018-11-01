@@ -26,8 +26,8 @@ include 'connect.php';
   if( !$result ) {
     echo '<p class="error">Something went wrong when loading the server</p>';
   } else {
-    echo 'Registered successfully!' . 
-          '<a href="signin.php">Home</a>';
+    echo 'Registered successfully!' .
+          '<a href="signin.html">Home</a>';
  }
 }
 ?>

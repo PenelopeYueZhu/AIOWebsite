@@ -48,7 +48,7 @@ function filterCategories(){
             allTrs[i].style.display = "none";
           } // end if search
         } // end loop selectedCats
-      }      
+      }
     } // End if tdTitle
   } // End for allTrs.length
 }
@@ -90,7 +90,7 @@ function getAllQuestions( ) {
 
         // The link to the details of the question
         var address = document.createElement('a')
-        address.setAttribute("href", "q_details.php?id=" + privateQIds[i]);
+        address.setAttribute("href", "q_details.html?id=" + privateQIds[i]);
 
         // The preview cell of the table
         var tdContent = document.createElement('td');
@@ -101,7 +101,7 @@ function getAllQuestions( ) {
         // The link to the details of the question
         var preview_address = document.createElement('a')
         preview_address.setAttribute("href",
-                                     "q_details.php?id=" + privateQIds[i]);
+                                     "q_details.html?id=" + privateQIds[i]);
         preview_address.appendChild(
                               document.createTextNode( privateQContent[i] ) );
         pContent.appendChild( preview_address );
@@ -141,7 +141,7 @@ function getAllQuestions( ) {
       var qTitle = document.createTextNode( qTitles[i]);
       // The link to the details of the question
       var address = document.createElement('a')
-      address.setAttribute("href", "q_details.php?id=" + qIds[i]);
+      address.setAttribute("href", "q_details.html?id=" + qIds[i]);
 
       // Create the category tag
       var category = document.createElement('h6');
@@ -155,7 +155,7 @@ function getAllQuestions( ) {
 
       // The link to the details of the question
       var preview_address = document.createElement('a')
-      preview_address.setAttribute("href", "q_details.php?id=" + qIds[i]);
+      preview_address.setAttribute("href", "q_details.html?id=" + qIds[i]);
       preview_address.appendChild( document.createTextNode( qContent[i] ) );
       pContent.appendChild( preview_address );
 

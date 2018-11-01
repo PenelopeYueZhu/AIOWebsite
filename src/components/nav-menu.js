@@ -49,7 +49,7 @@ class NavMenu extends Component {
     let normal_option_1 = <SideBarItem name={signIn} address="signin.html"/>
     let normal_option_2 = <SideBarItem name={createAccount} address="signup.html"/>;
     if( this.state.signed_in && this.state.level != 0) { // non-admin access
-      normal_option_1 = <SideBarItem name={viewQuestionHistory} address="viewUserQ.php"/>
+      normal_option_1 = <SideBarItem name={viewQuestionHistory} address="viewUserQ.html"/>
       normal_option_2 = <SideBarItem name={signOut} address="signout.php"/>;
     }
     else if ( this.state.signed_in && this.state.level == 0 ){ // Admin access
@@ -77,7 +77,7 @@ class NavMenu extends Component {
         </li>
         <li className="nav-item">
           <a className="nav-link"
-             href="viewAllQ.php">Browse All Questions</a>
+             href="viewAllQ.html">Browse All Questions</a>
         </li>
         <li className="nav-item">
           <a className="nav-link"

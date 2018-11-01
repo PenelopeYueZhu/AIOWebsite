@@ -1,13 +1,8 @@
-window.onload = function() {
+function onLoad() {
   // Execute all these after dom has been loaded
   getQuestionDetail(); // Get the question first
-  // Get the id of the question and past it to php scripts
-  document.getElementById("post-reply").setAttribute("action",
-                                    "pushReply.php" + window.location.search );
-  document.getElementById("post-cat").setAttribute("action",
-                                "pushQCategory.php" + window.location.search );
+  addPeerOptions();
 
-  //getAllCategories(); // Then we get all the categories and display them
 };
 
 // ------------------------------------------------------------------------
@@ -139,3 +134,127 @@ function getPublishStatus() {
 }
 
 // ------------------------------------------------------------------------
+
+function addPeerOptions() {
+  var userDataReq = new XMLHttpRequest(); // Request the data from signin script
+  userDataReq.onload = function () {
+    // Parse the responce text
+    var userDataArray = JSON.parse( userDataReq.responseText );
+    var userSignedIn = userDataArray[0];
+    var userPermission = userDataArray[2];
+    // Check the user's permission. If it's peer, creat the reply box, Category
+    // Select box and publish/unpublish option
+    if( userPermission < 2 ) {
+                          // THe form for reply box
+      $('body').append($('<form method="post" id="post-reply" '  +
+                           'action="pushReply.php' +  window.location.search +
+                          '">' +
+                           '<div class="form-group">' +
+                             '<label for="reply"> Add your reply:</label><br>'+
+                             '<textarea class="form-control"' +
+                                       'name="q_reply"' +
+                                       'style="margin-left: 2em;"/>' +
+                             '</textarea></div>'+
+                           '<button type="submit" class="btn btn-primary">' +
+                             'Submit</button>' +
+                        '</form><br>' +
+                         // the form to select categories
+                        '<form id="assign-cats" method="post" id="post-cat"' +
+                              'action="pushQCategory.php' +
+                              window.location.search + '">'+
+                          '<div id="select-cats"></div>' +
+                            '<button type="submit" ' +
+                                   'class="btn btn-outline-primary">'+
+                              'Assign Category' +
+                            '</button>' +
+                        '</form><br>' +
+                         // The publish / unpublish question button
+                        '<form method="post" ' + 'action="toggleQStatus.php'
+                                     + window.location.search + '">' +
+                          '<button type="submit" ' +
+                                  'class="btn btn-outline-primary"' +
+                                  'id="status_button">' +
+                          '</button>' +
+                       '</form>'));
+      // Now we have the dom ready, we call each function on the form
+      // To populate it
+      getCategoryOptions(); // Populate the category
+      getPublishStatus(); // Set the button to publish/unpublish
+
+    }
+  }
+
+  userDataReq.open( "get", "checkSignedIn.php" );
+
+  userDataReq.send();
+}
+
+// -------------------------------------------------------------------------
+/* Function that gets all the categories and lay them out as checkboxes for
+  peers to choose and add */
+function getCategoryOptions() {
+  var catReq = new XMLHttpRequest();
+  catReq.onload = function () {
+    var catsArray = JSON.parse( catReq.responseText );
+    // Now we write the values into the website
+
+    // Get all the categories
+    var allCats = catsArray["categories"];
+    var errors = catsArray["errors"];
+    var id = catsArray["catsId"];
+
+    // TODO Deal with errors
+
+    // Loop through the cats and display them
+    for( var i = 0 ; i < allCats.length ; i++ ) {
+      var checkDiv = document.createElement('div');
+      checkDiv.className = "form-check form-check-inline";
+
+      // Input box
+      var input = document.createElement('input');
+      input.className = "form-check-input";
+      // Set all the attributes
+      input.setAttribute("type", "checkbox");
+      input.setAttribute("name", i)
+      input.setAttribute("value", parseInt( id[i]) );
+      input.setAttribute("id", i);
+
+      // Label of the input box
+      var label = document.createElement('label');
+      label.className = "form-check-label";
+      // Set all the attributes
+      input.setAttribute("for", i);
+
+      label.innerHTML =  allCats[i];
+
+      // Group all elements together
+      checkDiv.appendChild( input );
+      checkDiv.appendChild( label );
+      document.getElementById("select-cats").appendChild( checkDiv );
+    }
+  }
+
+  catReq.open( "get", "getCategories.php");
+
+  catReq.send();
+}
+
+// ---------------------------------------------------------------------------
+
+/* Function that gets if a question is published or not */
+function getPublishStatus() {
+  var statusReq = new XMLHttpRequest();
+  statusReq.onload = function () {
+    var status = statusReq.responseText;
+    // If it's 1, then the question has been published
+    if( status.localeCompare( "\"1\"" ) == 0 )
+      document.getElementById("status_button").innerHTML = "unpublish";
+    else // Else we publish it
+      document.getElementById("status_button").innerHTML = "publish";
+  }
+
+  statusReq.open( "get",
+                  "getPublishStatus.php" + window.location.search);
+
+  statusReq.send();
+}

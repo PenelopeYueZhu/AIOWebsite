@@ -2,6 +2,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang = "nl" lang = "nl">
 <head>
+  <meta charset="utf-8" />
   <meta httl-equiv="Content-Type" content = "text/html; charset=UTF-8" />
   <meta name="description" content="A forum for UCSD students and faculties to
                                     ask questions about integrity."/>
@@ -40,9 +41,8 @@
 
   </div>
 
-  <script src="js/viewAllQ.js">
+  <script src="js/viewUserQ.js">
   </script>
-
   <!-- table to display all the questions -->
   <br>
   <input type="text" id="searchTitleInput"
@@ -50,18 +50,6 @@
          class="form-control" aria-label="Default"
          aria-describedby="inputGroup-sizing-default">
   <br>
-
-  <!-- display the categories to be selected by the student -->
-  <form id="filter-category" onsubmit="filterCategories(); return false">
-    <div id="select-cats"></div>
-
-    <button type="submit" class="btn btn-outline-primary">
-        Apply Category Filter
-    </button>
-  </form>
-
-  <br>
-
   <table class="table table-striped table-hover" id="allQTable">
     <thead>
       <tr>
@@ -72,5 +60,5 @@
     </thead>
   </table>
 
-
-<script type="text/javascript" src="index_bundle.js"></script></body>
+<script type="text/javascript" src="index_bundle.js"></script>
+</body>
