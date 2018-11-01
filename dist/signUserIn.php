@@ -48,7 +48,7 @@ include 'connect.php';
             $_SESSION['user_permission'] = $row['permission'];
           }
           echo 'Welcome, ' . $_SESSION['user_name'] .
-               '. <a href="index.php">Home</a>';
+               '. <a href="index.html">Home</a>';
         }
       }
     }
