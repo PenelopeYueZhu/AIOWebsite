@@ -12,14 +12,14 @@ include 'connect.php';
   else {
     $sql = "INSERT INTO
                 users( permission, user_name, user_pw, user_email,
-                       user_create_on, user_last_login, user_level)
+                       user_create_on, user_last_login)
                 VALUES( 2,
                         '" . mysqli_real_escape_string( $_SESSION['link'],
                                                   $_POST['user_name']) . "',
                         '" . sha1($_POST['user_pw']) . "',
                         '" . mysqli_real_escape_string( $_SESSION['link'],
                                                   $_POST['user_email']) . "',
-                        NOW(), null, 0)
+                        NOW(), null)
             ";//'
   $result = mysqli_query($_SESSION['link'], $sql);
 

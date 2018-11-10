@@ -9,12 +9,7 @@ include 'connect.php';
     $errors[] = 'The password cannot be empty';
 
     if( !empty($errors) ) {
-      echo '<div class="error">
-        <p>Uhmmmm...</p>
-        <ul>';
-        foreach( $errors as $key => $value )
-          echo '<li>' . $value . '</li>';
-        echo '</ul></div>';
+      echo 'error logging in.';
     } else {
       $sql = "SELECT
                   user_id,
@@ -34,11 +29,11 @@ include 'connect.php';
       $result = mysqli_query( $_SESSION['link'], $sql );
 
       if( !$result ) {
-        echo '<p class="error">Something went wrong...</p>';
+        echo 'Something went wrong...';
       } else {
         if( mysqli_num_rows ( $result ) == 0 ) {
-          echo '<p class="error">Incorrect username or password.
-                Please try again.</p>';
+          echo 'Incorrect username or password.
+                Please try again.';
         } else {
           $_SESSION['signed_in'] = true;
 

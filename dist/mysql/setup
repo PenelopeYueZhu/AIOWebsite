@@ -1,0 +1,44 @@
+CREATE TABLE users (
+user_id         INT(8) NOT NULL AUTO_INCREMENT,
+permission      INT(8) NOT NULL,
+user_name       VARCHAR(30) NOT NULL,
+user_pw         VARCHAR(255) NOT NULL,
+user_email      VARCHAR(255) NOT NULL UNIQUE,
+user_create_on  DATETIME NOT NULL,
+user_last_login DATETIME,
+UNIQUE INDEX user_name_unique (user_name),
+PRIMARY KEY (user_id)
+);
+
+CREATE TABLE categories (
+    cat_id INT(8) NOT NULL AUTO_INCREMENT,
+    cat_name VARCHAR(255) NOT NULL,
+    cat_description VARCHAR(255) NOT NULL,
+    UNIQUE INDEX cat_name_unique (cat_name),
+    PRIMARY KEY (cat_id)
+);
+
+CREATE TABLE questions (
+q_id        INT(8) NOT NULL AUTO_INCREMENT,
+q_subject   VARCHAR(255) NOT NULL,
+q_date      DATETIME NOT NULL,
+q_cat       INT(8) NOT NULL,
+q_by        INT(8) NOT NULL,
+q_content   TEXT NOT NULL,
+publish_status INT(8) NOT NULL,
+PRIMARY KEY (q_id)
+);
+
+CREATE TABLE replies (
+reply_id        INT(8) NOT NULL AUTO_INCREMENT,
+reply_date      DATETIME NOT NULL,
+reply_q_id      INT(8) NOT NULL,
+reply_by        INT(8) NOT NULL,
+reply_content   TEXT NOT NULL,
+PRIMARY KEY (reply_id)
+);
+
+INSERT INTO users
+(permission, user_name, user_pw, user_email, user_create_on, user_last_login)
+VALUES
+(0, "AIO Admin", SHA1("wel0veh0nesty"), "aio@ucsd.edu", NOW(), null);

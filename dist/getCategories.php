@@ -11,6 +11,7 @@ $sql_cat;
 $errors = array();
 $cats = array();
 $catsId = array();
+$catDescription = array();
 $return = array();
 
 // Get the question id if we have an id
@@ -37,7 +38,8 @@ if( isset( $_GET['id'] ) ) {
 else {
   $sql_cat = "SELECT
                   cat_name,
-                  cat_id
+                  cat_id,
+                  cat_description
               FROM
                   categories";
 
@@ -50,6 +52,7 @@ else {
     while( $row_cat = mysqli_fetch_assoc( $result_cat ) ) {
       array_push( $catsId, strval($row_cat['cat_id']) );
       array_push( $cats, $row_cat['cat_name'] );
+      array_push( $catDescription, $row_cat['cat_description']);
     }
   }
 }
@@ -57,6 +60,7 @@ else {
 $return["catsId"] = $catsId;
 $return["categories"] = $cats;
 $return["errors"] = $errors;
+$return["descriptions"] = $catDescription;
 
 echo json_encode( $return );
 ?>
