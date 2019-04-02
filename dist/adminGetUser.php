@@ -2,7 +2,7 @@
 include 'connect.php';
 
 // First verify that we are dealing with admin
-if( $_SESSION['user_permission'] == 0 ) {
+if( $_SESSION['signed_in'] == 0 ) {
 
   $permission = $_GET['sort'];
   // Arrays used to return the informatoin

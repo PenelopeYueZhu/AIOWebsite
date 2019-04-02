@@ -12,11 +12,9 @@ if( !$result_query ) echo 'Failed to load the database when trying to
                          display box.';
 else {
   $sql_new_reply = "INSERT INTO
-                        replies(reply_date, reply_q_id, reply_by,
-                              reply_content)
+                        replies(reply_date, reply_q_id, reply_content)
                     VALUES(NOW(),
                            '" . $q_id . "',
-                           '" . $_SESSION['user_id'] . "',
                            '" . mysqli_real_escape_string( $_SESSION['link'] ,
                                                            $_POST['q_reply']) . "'
                           )
@@ -32,7 +30,7 @@ else {
     $query = "COMMIT;";
     $result_query = mysqli_query( $_SESSION['link'], $query );
     echo 'Your reply has been posted.';
-    echo '<a href="index.php">Home</a>';
+    echo '<a href="index.html">Home</a>';
   }
 }
  ?>

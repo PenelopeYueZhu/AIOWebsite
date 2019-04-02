@@ -11,13 +11,12 @@
    // 1 - user name
    // 2 - user permission
    $userData = array( 1,
-                      $_SESSION['user_name'],
-                      $_SESSION['user_permission'] );
+                      $_SESSION['user_name'] );
    echo json_encode( $userData );
  } else {
 
    // Then we encode guest data
-   $guestData = array( 0, 'guest', 3);
+   $guestData = array( 2, 'guest');
    echo json_encode( $guestData );
  }
  ?>

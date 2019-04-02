@@ -48,31 +48,11 @@
       Message: <textarea class="form-control" name="q_content" /></textarea>
     </div>
 
-    <script>
-      var signedInReq = new XMLHttpRequest(); // Request the data from signin script
-      signedInReq.onload = function () {
-        var button = $("#submit-question");
-        // Parse the responce text
-        var userDataArray = JSON.parse( signedInReq.responseText );
-        var signed_in = userDataArray[0];
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+    <div class="g-recaptcha"
+         data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI">
+    </div>
 
-        // If user is signed in allow them to submit the question
-        if( parseInt(signed_in) != 0 ) {
-          button.prop('disabled', false);
-        } else {
-          button.prop('disabled', true);
-
-          $("#ask-form").append(
-               document.createTextNode( "Please sign in to ask a question.") );
-        }
-
-      }
-
-      signedInReq.open( "get", "checkSignedIn.php" );
-
-      signedInReq.send();
-
-    </script>
     <button type="submit" class="btn btn-primary" id="submit-question">
       Submit
     </button>

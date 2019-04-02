@@ -20,9 +20,8 @@ $privateQTitle = array();
 $privateCat = array();
 $privateContent = array();
 
-// Only for admins
-if( isset($_SESSION['user_permission'] ) &&
-     $_SESSION['user_permission'] < 2 ) {
+// If the user is signed in, then we know it's a peer/admin
+if( isset($_SESSION['signed_in'] ) && $_SESSION['signed_in'] == 1 ) {
 
   // Get private quesitons that are not published yet
   $sql_private = getPrivateQuestions( );
@@ -79,13 +78,9 @@ echo json_encode($allQ);
 function getPublishedQuestions(  ) {
   $sql_return = null;
   $sql_return = "SELECT
-                      q_id, q_subject, q_content, q_date, q_by, q_cat,
-                      user_id, user_name, publish_status
+                      q_id, q_subject, q_content, q_date,q_cat, publish_status
                   FROM
                       questions
-                  LEFT JOIN
-                      users
-                  ON questions.q_by = users.user_id
                   WHERE questions.publish_status = 1
                   ORDER BY
                       q_id DESC
@@ -97,13 +92,9 @@ function getPublishedQuestions(  ) {
 function getPrivateQuestions(  ) {
   $sql = null;
   $sql = "SELECT
-              q_id, q_subject, q_content, q_date, q_by, q_cat,
-              user_id, user_name, publish_status
+              q_id, q_subject, q_content, q_date, q_cat, publish_status
           FROM
               questions
-          LEFT JOIN
-              users
-          ON questions.q_by = users.user_id
           WHERE questions.publish_status = 0
           ORDER BY
               q_id DESC

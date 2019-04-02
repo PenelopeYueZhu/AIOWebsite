@@ -21,7 +21,6 @@ else { // Get all the information about that question
               q_subject,
               q_date,
               q_cat,
-              q_by,
               q_content,
               publish_status
           FROM
@@ -46,7 +45,6 @@ else { // Get all the information about that question
 $sql_reply = "SELECT
                   reply_id,
                   DATE(reply_date),
-                  reply_by,
                   reply_content
                FROM
                    replies

@@ -141,7 +141,7 @@ function addPeerOptions() {
     // Parse the responce text
     var userDataArray = JSON.parse( userDataReq.responseText );
     var userSignedIn = userDataArray[0];
-    var userPermission = userDataArray[2];
+    var userPermission = userDataArray[0];
     // Check the user's permission. If it's peer, creat the reply box, Category
     // Select box and publish/unpublish option
     if( userPermission < 2 ) {
@@ -183,7 +183,6 @@ function addPeerOptions() {
 
     }
   }
-
   userDataReq.open( "get", "checkSignedIn.php" );
 
   userDataReq.send();

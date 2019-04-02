@@ -7,8 +7,7 @@ class NavMenu extends Component {
   constructor( props ) {
     super( props );
 
-    this.state = { signed_in: 0,
-                   level: 3,
+    this.state = { signed_in: 2,
                    name: 'guest' };
     //console.log( this.state.name );
 
@@ -25,7 +24,6 @@ class NavMenu extends Component {
       // Permission level
       component.setState(() => {
         return {signed_in: userDataArray[0],
-                level: userDataArray[2],
                 name:  userDataArray[1] };
       });
     }
@@ -37,25 +35,16 @@ class NavMenu extends Component {
 
   render() {
     // All the constants for all the options
-    const viewReplyHistory = "View your reply history";
-    const viewQuestionHistory = "View your question history";
     const signIn = 'Sign in';
     const signOut = "Sign out";
-    const createAccount = "Create a new account";
-    const viewProfile = "Update your profile";
     const manage = "Manager all users";
 
     // Prompt the user to sign in or to show their account
-    let normal_option_1 = <SideBarItem name={signIn} address="signin.html"/>
-    let normal_option_2 = <SideBarItem name={createAccount} address="signup.html"/>;
-    if( this.state.signed_in && this.state.level != 0) { // non-admin access
-      normal_option_1 = <SideBarItem name={viewQuestionHistory} address="viewUserQ.html"/>
-      normal_option_2 = <SideBarItem name={signOut} address="signout.php"/>;
+    let user_option = <SideBarItem name={signIn} address="signin.html"/>;
+    if( this.state.signed_in < 2 ) { // signed in access
+      user_option = <SideBarItem name={signOut} address="signout.php"/>;
     }
-    else if ( this.state.signed_in && this.state.level == 0 ){ // Admin access
-      normal_option_1 = <SideBarItem name={manage} address="manage.html"/>
-      normal_option_2 = <SideBarItem name={signOut} address="signout.php"/>;
-    }
+    else user_option = <SideBarItem name={signIn} address="signin.html"/>;
 
     return (
       <nav className="navbar navbar-expand-sm bg-dark navbar-dark">
@@ -65,8 +54,7 @@ class NavMenu extends Component {
             Hello, {this.state.name}
           </a>
           <div className="dropdown-menu">
-            {normal_option_1}
-            {normal_option_2}
+            {user_option}
           </div>
         </li>
         <li className="nav-item">
