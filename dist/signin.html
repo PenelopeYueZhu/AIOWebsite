@@ -7,6 +7,13 @@
   <meta name="description" content="A forum for UCSD students and faculties to
                                     ask questions about integrity."/>
   <meta name="keywords" content="UCSD, integrity, question, realtime"/>
+
+	<!-- FOR google authetication -->
+	<meta name="google-signin-client_id"
+	      content=
+		"710662674500-futrtlk6umv4lnv0au4iqr4q70h107p3.apps.googleusercontent.com">
+
+
   <title>Integrity Overflow</title>
 
   <!-- Linking in bootstrap -->
@@ -18,6 +25,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
   <!-- Latest compiled JavaScript -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+	<!-- Google user authentication API -->
+	<script src="https://apis.google.com/js/platform.js" async defer></script>
 
 </head>
 <body>
@@ -34,17 +43,30 @@
              privacy. </h2>
   </div>
 
-  <div id="middle"></div>
-  <form method="post" action="signUserIn.php">
-   <div class="form-group">
-     <label for="user_name">User name:</label>
-     <input type="user_name" class="form-control" id="name" name="user_name">
-   </div>
-   <div class="form-group">
-     <label for="pwd">Password:</label>
-     <input type="password" class="form-control" id="pwd" name="user_pw">
-   </div>
-   <button type="submit" class="btn btn-primary">Submit</button>
-  </form>
+	<!-- Container for react -->
+	<div id="middle">
+
+	</div>
+
+	<div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
+	<script>
+		function onSignIn(googleUser) {
+      // Useful data for your client-side scripts:
+      var profile = googleUser.getBasicProfile();
+      console.log("Email: " + profile.getEmail());
+
+      // The ID token you need to pass to your backend:
+      var id_token = googleUser.getAuthResponse().id_token;
+			// Send the token to the backend for verification
+			var xhr = new XMLHttpRequest();
+			xhr.open('POST', 'SignUserIn.php');
+			xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+			xhr.onload = function() {
+				console.log( 'returned');
+  			console.log('Signed in as: ' + xhr.responseText);
+			};
+			xhr.send('idtoken=' + id_token);
+    }
+	</script>
 
 <script type="text/javascript" src="index_bundle.js"></script></body>

@@ -7,14 +7,13 @@ class NavMenu extends Component {
   constructor( props ) {
     super( props );
 
-    this.state = { signed_in: 2,
-                   name: 'guest' };
-    //console.log( this.state.name );
+    this.state = { signed_in: 1,
+                   name: 'Triton' };
 
     // Default value for react is not signed in
     var component = this;
 
-    var userDataReq = new XMLHttpRequest(); // Request the data from signin script
+  /*  var userDataReq = new XMLHttpRequest(); // Request the data from signin script
     userDataReq.onload = function () {
       // Parse the responce text
       var userDataArray = JSON.parse( userDataReq.responseText );
@@ -30,21 +29,19 @@ class NavMenu extends Component {
 
     userDataReq.open( "get", "checkSignedIn.php" );
 
-    userDataReq.send();
+    userDataReq.send();*/
   }
 
   render() {
     // All the constants for all the options
     const signIn = 'Sign in';
     const signOut = "Sign out";
-    const manage = "Manager all users";
 
     // Prompt the user to sign in or to show their account
     let user_option = <SideBarItem name={signIn} address="signin.html"/>;
-    if( this.state.signed_in < 2 ) { // signed in access
+    if( this.state.signed_in == 0 ) { // signed in access
       user_option = <SideBarItem name={signOut} address="signout.php"/>;
-    }
-    else user_option = <SideBarItem name={signIn} address="signin.html"/>;
+  	}
 
     return (
       <nav className="navbar navbar-expand-sm bg-dark navbar-dark">
