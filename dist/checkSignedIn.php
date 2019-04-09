@@ -9,15 +9,14 @@
  */
 
 include 'connect.php'; // Connect to the sql database
-$indUser = $GLOBALS['SIGN_IN_SESSION_INDEX']; // Get the index of user info
 
-if( isset($_SESSION[$indUser]) && ($_SESSION[$indUser] ) ) {
-   // Then we encode the user data
-   // array[0] - user permission, 0 for admin
-	 // array [1] - user name, UCSD AIO for admin
-	 $userData = array( 0, 'UCSD AIO' );
-	 echo json_encode( $userData );
-} else{
+if( isset($_SESSION['signed_in']) && ($_SESSION['signed_in'] ) ) {
+	// Then we encode the user data
+	// array[0] - user permission, 0 for admin
+	// array [1] - user name, UCSD AIO for admin
+	$userData = array( 0, 'UCSD AIO' );
+	echo json_encode( $userData );
+}else{
 
 	// Then we encode guest data
 	$guestData = array( 1, 'Triton');

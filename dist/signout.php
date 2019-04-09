@@ -1,4 +1,8 @@
 <?php
+/**
+ * Script to sign the user (Admin) out.
+ * Uses google
+ */
 session_start();
 session_unset();
 session_destroy();

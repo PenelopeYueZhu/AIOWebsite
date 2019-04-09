@@ -13,11 +13,13 @@ class NavMenu extends Component {
     // Default value for react is not signed in
     var component = this;
 
-  /*  var userDataReq = new XMLHttpRequest(); // Request the data from signin script
+		// Request the data from signin script
+    var userDataReq = new XMLHttpRequest();
     userDataReq.onload = function () {
       // Parse the responce text
+			console.log( userDataReq.responseText );
+
       var userDataArray = JSON.parse( userDataReq.responseText );
-      //console.log( userDataArray[1]);
 
       // Update the component so we rerender with fetched username and
       // Permission level
@@ -29,18 +31,19 @@ class NavMenu extends Component {
 
     userDataReq.open( "get", "checkSignedIn.php" );
 
-    userDataReq.send();*/
+    userDataReq.send();
   }
 
   render() {
+
     // All the constants for all the options
-    const signIn = 'Sign in';
-    const signOut = "Sign out";
+    const signInText = 'Sign in';
+    const signOutText = "Sign out";
 
     // Prompt the user to sign in or to show their account
-    let user_option = <SideBarItem name={signIn} address="signin.html"/>;
+    let user_option = <SideBarItem name={signInText} address="signin.html"/>;
     if( this.state.signed_in == 0 ) { // signed in access
-      user_option = <SideBarItem name={signOut} address="signout.php"/>;
+      user_option = <SideBarItem name={signOutText} address="signOut.html"/>;
   	}
 
     return (

@@ -60,6 +60,7 @@ function getAllQuestions( ) {
   var allQReq = new XMLHttpRequest();
   allQReq.onload = function () {
     // Parse the responce text
+		console.log( allQReq.responseText );
     var allQReqArray = JSON.parse( allQReq.responseText );
 
     // Now we write the values into the website

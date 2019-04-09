@@ -9,7 +9,7 @@ const SideBarItem = ( props ) => {
     const dest_name = props.name;
 
   return (
-    <a className="dropdown-item" href={dest_address}>{dest_name}</a>
+    <a className="dropdown-item" href={dest_address} >{dest_name}</a>
   );
 };
 export default SideBarItem;

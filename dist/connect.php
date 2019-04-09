@@ -6,7 +6,7 @@
  * https://stackoverflow.com/questions/8311320/how-to-change-the-session-timeout-in-php
  */
 
-$FINAL_SESSION_TIME_IN_MS = 216000;
+/*$FINAL_SESSION_TIME_IN_MS = 216000;
 $FINAL_SESSION_TIME_IN_S = 3600;
 
 // Server should keep session data for at least 1 hour
@@ -28,18 +28,20 @@ if( isset( $_SESSION['discard_after'] ) && $now > $_SESSION['discard_after'] ) {
   session_start();
 }
 
-$_SESSION['discard_after'] = $now + $FINAL_SESSION_TIME_IN_S;
+$_SESSION['discard_after'] = $now + $FINAL_SESSION_TIME_IN_S;*/
 
-
+session_start();
 // Avoid connection more than once
 //if( !isset( $_SESSION['link'] ) || $_SESSION['link'] == null ) {
 
   // Get the information we need from the private folder
   $config = parse_ini_file( '../../private/connection.ini');
-  $server = $config['servername'];
+  $server = 'p:' . $config['servername'];
   $username   = $config['username'];
   $password   = $config['password'];
   $database   = 'test_forum_db';
+
+  mysqli_connect($server, $username,$password, $database);
 
   $_SESSION['link'] = mysqli_connect($server, $username,$password, $database);
   if( !$_SESSION['link'] ){
