@@ -174,7 +174,7 @@ function getAllQuestions( ) {
     }
 
   }
-  allQReq.open( "get", "getAllQ.php");
+  allQReq.open( "get", "GetAllQ.php");
 
   allQReq.send();
 }
@@ -226,7 +226,7 @@ function getAllCategories() {
     }
   }
 
-  catReq.open( "get", "getCategories.php");
+  catReq.open( "get", "GetCategories.php");
 
   catReq.send();
 }

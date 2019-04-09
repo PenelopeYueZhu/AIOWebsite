@@ -58,7 +58,7 @@ function getQuestionDetail() {
     document.getElementById("replies").appendChild( replyDiv );
   }
   questionReq.open( "get",
-                    "getQDetail.php"  +window.location.search);
+                    "GetQDetail.php"  +window.location.search);
 
   questionReq.send();
 }
@@ -108,7 +108,7 @@ function getAllCategories() {
     }
   }
 
-  catReq.open( "get", "getCategories.php");
+  catReq.open( "get", "GetCategories.php");
 
   catReq.send();
 }
@@ -128,7 +128,7 @@ function getPublishStatus() {
   }
 
   statusReq.open( "get",
-                  "getPublishStatus.php" + window.location.search);
+                  "GetPublishStatus.php" + window.location.search);
 
   statusReq.send();
 }
@@ -144,10 +144,10 @@ function addPeerOptions() {
     var userPermission = userDataArray[0];
     // Check the user's permission. If it's peer, creat the reply box, Category
     // Select box and publish/unpublish option
-    if( userPermission < 2 ) {
+    if( userPermission < 1 ) {
                           // THe form for reply box
       $('body').append($('<form method="post" id="post-reply" '  +
-                           'action="pushReply.php' +  window.location.search +
+                           'action="PushReply.php' +  window.location.search +
                           '">' +
                            '<div class="form-group">' +
                              '<label for="reply"> Add your reply:</label><br>'+
@@ -160,7 +160,7 @@ function addPeerOptions() {
                         '</form><br>' +
                          // the form to select categories
                         '<form id="assign-cats" method="post" id="post-cat"' +
-                              'action="pushQCategory.php' +
+                              'action="PushQCategory.php' +
                               window.location.search + '">'+
                           '<div id="select-cats"></div>' +
                             '<button type="submit" ' +
@@ -169,7 +169,7 @@ function addPeerOptions() {
                             '</button>' +
                         '</form><br>' +
                          // The publish / unpublish question button
-                        '<form method="post" ' + 'action="toggleQStatus.php'
+                        '<form method="post" ' + 'action="ToggleQStatus.php'
                                      + window.location.search + '">' +
                           '<button type="submit" ' +
                                   'class="btn btn-outline-primary"' +
@@ -183,7 +183,7 @@ function addPeerOptions() {
 
     }
   }
-  userDataReq.open( "get", "checkSignedIn.php" );
+  userDataReq.open( "get", "CheckSignedIn.php" );
 
   userDataReq.send();
 }
@@ -233,7 +233,7 @@ function getCategoryOptions() {
     }
   }
 
-  catReq.open( "get", "getCategories.php");
+  catReq.open( "get", "GetCategories.php");
 
   catReq.send();
 }
@@ -253,7 +253,7 @@ function getPublishStatus() {
   }
 
   statusReq.open( "get",
-                  "getPublishStatus.php" + window.location.search);
+                  "GetPublishStatus.php" + window.location.search);
 
   statusReq.send();
 }
