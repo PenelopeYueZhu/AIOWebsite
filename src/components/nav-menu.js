@@ -7,25 +7,24 @@ class NavMenu extends Component {
   constructor( props ) {
     super( props );
 
-    this.state = { signed_in: 0,
-                   level: 3,
-                   name: 'guest' };
-    //console.log( this.state.name );
+    this.state = { signed_in: 1,
+                   name: 'Triton' };
 
     // Default value for react is not signed in
     var component = this;
 
-    var userDataReq = new XMLHttpRequest(); // Request the data from signin script
+		// Request the data from signin script
+    var userDataReq = new XMLHttpRequest();
     userDataReq.onload = function () {
       // Parse the responce text
+			console.log( userDataReq.responseText );
+
       var userDataArray = JSON.parse( userDataReq.responseText );
-      //console.log( userDataArray[1]);
 
       // Update the component so we rerender with fetched username and
       // Permission level
       component.setState(() => {
         return {signed_in: userDataArray[0],
-                level: userDataArray[2],
                 name:  userDataArray[1] };
       });
     }
@@ -36,26 +35,16 @@ class NavMenu extends Component {
   }
 
   render() {
+
     // All the constants for all the options
-    const viewReplyHistory = "View your reply history";
-    const viewQuestionHistory = "View your question history";
-    const signIn = 'Sign in';
-    const signOut = "Sign out";
-    const createAccount = "Create a new account";
-    const viewProfile = "Update your profile";
-    const manage = "Manager all users";
+    const signInText = 'Sign in';
+    const signOutText = "Sign out";
 
     // Prompt the user to sign in or to show their account
-    let normal_option_1 = <SideBarItem name={signIn} address="signin.html"/>
-    let normal_option_2 = <SideBarItem name={createAccount} address="signup.html"/>;
-    if( this.state.signed_in && this.state.level != 0) { // non-admin access
-      normal_option_1 = <SideBarItem name={viewQuestionHistory} address="viewUserQ.html"/>
-      normal_option_2 = <SideBarItem name={signOut} address="signout.php"/>;
-    }
-    else if ( this.state.signed_in && this.state.level == 0 ){ // Admin access
-      normal_option_1 = <SideBarItem name={manage} address="admin-manage.php"/>
-      normal_option_2 = <SideBarItem name={signOut} address="signout.php"/>;
-    }
+    let user_option = <SideBarItem name={signInText} address="signin.html"/>;
+    if( this.state.signed_in == 0 ) { // signed in access
+      user_option = <SideBarItem name={signOutText} address="signOut.html"/>;
+  	}
 
     return (
       <nav className="navbar navbar-expand-sm bg-dark navbar-dark">
@@ -65,8 +54,7 @@ class NavMenu extends Component {
             Hello, {this.state.name}
           </a>
           <div className="dropdown-menu">
-            {normal_option_1}
-            {normal_option_2}
+            {user_option}
           </div>
         </li>
         <li className="nav-item">

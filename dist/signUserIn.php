@@ -1,55 +1,40 @@
 <?php
+/**
+ * Script to sign a user in. Use Google API for user authenticatin OAuth2
+ * Only used for admins
+ * UCSD AIO
+ */
 include 'connect.php';
-  // Check for errors
-  $errors = array();
+require_once '../vendor/autoload.php';
 
-  if( !isset( $_POST['user_name'] ) )
-    $errors[] = 'The username field must not be empty';
-  if( !isset( $_POST['user_pw'] ) )
-    $errors[] = 'The password cannot be empty';
+// Get $id_token via HTTPS POST.
+$id_token = $_POST['idtoken'];
+$CLIENT_ID = '710662674500' .
+             '-futrtlk6umv4lnv0au4iqr4q70h107p3.apps.googleusercontent.com';
+$ADMIND_ID = 106154969788821290729;
 
-    if( !empty($errors) ) {
-      echo '<div class="error">
-        <p>Uhmmmm...</p>
-        <ul>';
-        foreach( $errors as $key => $value )
-          echo '<li>' . $value . '</li>';
-        echo '</ul></div>';
-    } else {
-      $sql = "SELECT
-                  user_id,
-                  permission,
-                  user_name,
-                  user_level
-              FROM
-                  users
-              WHERE
-                  user_name =
-                  '" . mysqli_real_escape_string( $_SESSION['link'],
-                                                  $_POST['user_name']) . "'
-              AND
-                  user_pw =
-                    '" . sha1( $_POST['user_pw'] ) . "'
-             "; //'
-      $result = mysqli_query( $_SESSION['link'], $sql );
+$returnVal = 0;
 
-      if( !$result ) {
-        echo '<p class="error">Something went wrong...</p>';
-      } else {
-        if( mysqli_num_rows ( $result ) == 0 ) {
-          echo '<p class="error">Incorrect username or password.
-                Please try again.</p>';
-        } else {
-          $_SESSION['signed_in'] = true;
+if( !$id_token ) echo json_encode( 'failed to pass in the token');
 
-          while( $row = mysqli_fetch_assoc( $result ) ) {
-            $_SESSION['user_id'] = $row['user_id'];
-            $_SESSION['user_name'] = $row['user_name'];
-            $_SESSION['user_permission'] = $row['permission'];
-          }
-          echo 'Welcome, ' . $_SESSION['user_name'] .
-               '. <a href="index.html">Home</a>';
-        }
-      }
-    }
+// Specify the CLIENT_ID of the app that accesses the backend
+$client = new Google_Client(['client_id' => $CLIENT_ID ]);
+$payload = $client->verifyIdToken($id_token); // Verify ID token
+if ($payload) {
+	$userid = $payload['sub'];
+
+	// Now compare the userid. If it is the right id, then we know it is
+	// The right account
+	if( $userid == $ADMIND_ID ) {
+		$_SESSION['signed_in'] = TRUE;
+		$returnVal = 1;
+	}
+	// If request specified a G Suite domain:
+	//$domain = $payload['hd'];
+
+}
+
+// Return 0 if we didnt get a payload or the id is wrong
+// 1 if we successfully signed in
+echo json_encode( $returnVal );
 ?>

@@ -1,6 +1,8 @@
 <?php
-// File that gets all the questions and display them based on the sorting
-// And filtering requirement
+/**
+ * File that gets all the questions and display them based on the sorting
+ * And filtering requirement
+ */
 
 include 'connect.php';
 
@@ -11,7 +13,8 @@ $qTimes = array();
 $qId = array();
 $qTitles = array();
 $qContent = array();
-$allQ = array();
+
+$allQ = array(); // The array that will store all the arrays
 
 // only used for admins
 $privateQTimes = array();
@@ -20,13 +23,12 @@ $privateQTitle = array();
 $privateCat = array();
 $privateContent = array();
 
-// Only for admins
-if( isset($_SESSION['user_permission'] ) &&
-     $_SESSION['user_permission'] < 2 ) {
+// If the user is signed in, then we know it's a peer/admin
+if( isset($_SESSION['signed_in'] ) && $_SESSION['signed_in'] == 1 ) {
 
   // Get private quesitons that are not published yet
-  $sql_private = getPrivateQuestions( );
-  $result_private =  mysqli_query( $_SESSION['link'], $sql_private );
+	$sql_private = getQueryString( 0 );
+	$result_private =  mysqli_query( $_SESSION['link'], $sql_private );
 
   // Get all the entries into the array
   while( $row_private = mysqli_fetch_assoc( $result_private) ) {
@@ -47,11 +49,11 @@ if( isset($_SESSION['user_permission'] ) &&
 }
 
 // Get the all published questions for everyone
-$sql_allQ = getPublishedQuestions(  );
+$sql_allQ = getQueryString( 1 );
 
 $result_allQ = mysqli_query( $_SESSION['link'], $sql_allQ );
 
-// If the result is null
+// If the result is null, store the error message 
 if( !$result_allQ ) {
   $error = $error . 'Fail to load all the posts.';
 }
@@ -75,39 +77,21 @@ $allQ['error'] = $error;
 
 echo json_encode($allQ);
 
-/* Function to grab questions based on filter and sorting options */
-function getPublishedQuestions(  ) {
-  $sql_return = null;
+/**
+ * Function to grab questions based on filter and sorting options
+ * @param publishStatus 1 means the question is public, 0 is private
+ * @return sql_return the sql string that is used to query questions
+ */
+function getQueryString( $publishStatus  ) {
   $sql_return = "SELECT
-                      q_id, q_subject, q_content, q_date, q_by, q_cat,
-                      user_id, user_name, publish_status
+                      q_id, q_subject, q_content, q_date,q_cat, publish_status
                   FROM
                       questions
-                  LEFT JOIN
-                      users
-                  ON questions.q_by = users.user_id
-                  WHERE questions.publish_status = 1
+                  WHERE questions.publish_status = $publishStatus
                   ORDER BY
                       q_id DESC
                 ";
 
   return $sql_return;
-}
-
-function getPrivateQuestions(  ) {
-  $sql = null;
-  $sql = "SELECT
-              q_id, q_subject, q_content, q_date, q_by, q_cat,
-              user_id, user_name, publish_status
-          FROM
-              questions
-          LEFT JOIN
-              users
-          ON questions.q_by = users.user_id
-          WHERE questions.publish_status = 0
-          ORDER BY
-              q_id DESC
-        ";
-  return $sql;
 }
 ?>

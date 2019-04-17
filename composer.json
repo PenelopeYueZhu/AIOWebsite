@@ -1,0 +1,6 @@
+{
+    "require": {
+        "delight-im/auth": "^8.1",
+        "google/apiclient": "^2.0"
+    }
+}

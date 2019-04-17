@@ -60,6 +60,7 @@ function getAllQuestions( ) {
   var allQReq = new XMLHttpRequest();
   allQReq.onload = function () {
     // Parse the responce text
+		console.log( allQReq.responseText );
     var allQReqArray = JSON.parse( allQReq.responseText );
 
     // Now we write the values into the website
@@ -173,7 +174,7 @@ function getAllQuestions( ) {
     }
 
   }
-  allQReq.open( "get", "getAllQ.php");
+  allQReq.open( "get", "GetAllQ.php");
 
   allQReq.send();
 }
@@ -225,7 +226,7 @@ function getAllCategories() {
     }
   }
 
-  catReq.open( "get", "getCategories.php");
+  catReq.open( "get", "GetCategories.php");
 
   catReq.send();
 }
