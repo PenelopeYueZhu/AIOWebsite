@@ -8,17 +8,15 @@
 session_start();
 
 // Get the information we need from the private folder
-$config = parse_ini_file( '../../private/connection.ini');
-$server = 'p:' . $config['servername'];
-$username   = $config['username'];
-$password   = $config['password'];
-$database   = 'test_forum_db';
+// $config = parse_ini_file( '../../private/connection.ini');
+$server =  'aioforumdb.cvcwqiayiang.us-east-2.rds.amazonaws.com';
+$username   = 'aioadmin';
+$password   = 'Zy100,.,.';
+$database   = 'ebdb';
 
 // Connect to the database and store it in a $_SESSION obect
 // Will be disconnect later
 $_SESSION['link'] = mysqli_connect($server, $username,$password, $database);
-
-
 
 if( !$_SESSION['link'] ){
 	exit('Error: could not establish database connection');

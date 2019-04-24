@@ -5,7 +5,7 @@
  * UCSD AIO
  */
 include 'connect.php';
-require_once '../vendor/autoload.php';
+require_once 'vendor/autoload.php';
 
 // Get $id_token via HTTPS POST.
 $id_token = $_POST['idtoken'];

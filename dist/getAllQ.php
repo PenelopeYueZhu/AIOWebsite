@@ -8,72 +8,28 @@ include 'connect.php';
 
 // arrays to store different kinds of information we need
 $error = '';
-$categories = array();
-$qTimes = array();
-$qId = array();
-$qTitles = array();
-$qContent = array();
-
 $allQ = array(); // The array that will store all the arrays
-
-// only used for admins
-$privateQTimes = array();
-$privateQId = array();
-$privateQTitle = array();
-$privateCat = array();
-$privateContent = array();
+// The key that represents what publsh_status questin we want
+// Default is 1 - public questions
+$statusKey = getQueryString( 1 );
 
 // If the user is signed in, then we know it's a peer/admin
 if( isset($_SESSION['signed_in'] ) && $_SESSION['signed_in'] == 1 ) {
 
   // Get private quesitons that are not published yet
-	$sql_private = getQueryString( 0 );
-	$result_private =  mysqli_query( $_SESSION['link'], $sql_private );
-
-  // Get all the entries into the array
-  while( $row_private = mysqli_fetch_assoc( $result_private) ) {
-    array_push( $privateQTimes, $row_private['q_date'] );
-    array_push( $privateQId, $row_private['q_id']);
-    array_push( $privateQTitle, $row_private['q_subject'] );
-    array_push( $privateContent, $row_private['q_content'] );
-    array_push($privateCat,
-               $_SESSION["categories"][intval($row_private['q_cat']) - 1]);
-  }
-
-  // Push them into allQ for return
-  $allQ['privateQTimes'] = $privateQTimes;
-  $allQ['privateQId'] = $privateQId;
-  $allQ['privateQTitle'] = $privateQTitle;
-  $allQ['privateContent'] = $privateContent;
-  $allQ['privateCat'] = $privateCat;
+	$statusKey = getQueryString( 0 );
 }
 
-// Get the all published questions for everyone
-$sql_allQ = getQueryString( 1 );
+$result_allQ = mysqli_query( $_SESSION['link'], $statusKey );
 
-$result_allQ = mysqli_query( $_SESSION['link'], $sql_allQ );
-
-// If the result is null, store the error message 
+// If the result is null, store the error message
 if( !$result_allQ ) {
-  $error = $error . 'Fail to load all the posts.';
+	echo null;
+  exit(1);
 }
 else { // Get all the questions into the array
-  while( $row = mysqli_fetch_assoc( $result_allQ ) ){
-    array_push( $qTimes, $row['q_date'] );
-    array_push( $qId, $row['q_id']);
-    array_push( $qTitles, $row['q_subject'] );
-    array_push( $qContent, $row['q_content'] );
-    array_push($categories, $_SESSION["categories"][intval($row['q_cat']) - 1]);
-  }
+	parseQueryResult( $result_allQ, $allQ );
 }
-
-// Then we put all the information into the return array
-$allQ['qTimes'] = $qTimes;
-$allQ['qId'] = $qId;
-$allQ['qTitles'] = $qTitles;
-$allQ['qContent'] = $qContent;
-$allQ['category'] = $categories;
-$allQ['error'] = $error;
 
 echo json_encode($allQ);
 
@@ -83,15 +39,55 @@ echo json_encode($allQ);
  * @return sql_return the sql string that is used to query questions
  */
 function getQueryString( $publishStatus  ) {
+	// use questions.puslish_state >= $publishStatus
+	// So we can get both public and private question when we have param 0
+	// But only public questions when we have param 1
   $sql_return = "SELECT
                       q_id, q_subject, q_content, q_date,q_cat, publish_status
                   FROM
                       questions
-                  WHERE questions.publish_status = $publishStatus
+                  WHERE questions.publish_status >= $publishStatus
                   ORDER BY
                       q_id DESC
                 ";
 
   return $sql_return;
+}
+
+/**
+ * Function to push question information to corresponding array
+ * @param queryResult the fetched info from the database
+ * @param resultArray the array to store the parsed value of questions from
+ *                    the queryResult. This is passed in by reference
+ */
+function parseQueryResult( $queryResult, &$resultArray ) {
+	// First declare temp arrays
+	$qCats = array();
+	$qTimes = array();
+	$qId = array();
+	$qTitles = array();
+	$qContent = array();
+	$qPublished = array();
+
+	// First loop through the rows
+	while( $row = mysqli_fetch_assoc( $queryResult) ) {
+		// Then enter the data into each array column by column
+		array_push( $qTimes, $row['q_date'] );
+		array_push( $qId, $row['q_id']);
+		array_push( $qTitles, $row['q_subject'] );
+		array_push( $qContent, $row['q_content'] );
+		array_push( $qCats,
+							  $_SESSION["categories"][intval($row['q_cat']) - 1]);
+		array_push( $qPublished, $row['publish_status'] );
+	}
+
+	// Push them into allQ for return
+	$resultArray['qTimes'] = $qTimes;
+	$resultArray['qId'] = $qId;
+	$resultArray['qTitles'] = $qTitles;
+	$resultArray['qContent'] = $qContent;
+	$resultArray['qCats'] = $qCats;
+	$resultArray['qPublished'] = $qPublished;
+
 }
 ?>

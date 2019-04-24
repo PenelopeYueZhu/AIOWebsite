@@ -11,6 +11,7 @@ function onSignIn(googleUser) {
 	xhr.open('POST', 'SignUserIn.php');
 	xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 	xhr.onload = function() {
+		console.log( "response is " + xhr.responseText );
 		var signedInSuccessful = JSON.parse( xhr.responseText );
 
 		if( parseInt(signedInSuccessful) == 1 ) {
