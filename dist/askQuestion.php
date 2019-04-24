@@ -12,11 +12,15 @@
   <!-- Latest compiled and minified CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
   <!-- jQuery library -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
   <!-- Popper JS -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
   <!-- Latest compiled JavaScript -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+	<!-- reCAPTCHA script -->
+	<script
+		src="https://www.google.com/recaptcha/api.js?render=6LfCCqAUAAAAAPHeRLxpWOb7ikxdUuSbAudbnLV0">
+	</script>
 
 </head>
 <body>
@@ -39,24 +43,48 @@
 
   </div>
 
-  <form method="post" action="pushQuestion.php" id="ask-form">
+  <form method="post" onsubmit="event.preventDefault(); validateHuman();"
+	      id="ask-form">
     <div class="form-group">
       <label for="subject">Subject:</label>
-      <input type="text" name="q_subject" class="form-control" />
+      <input type="text" name="q_subject" class="form-control" id="q_subject" />
+      Message:
+			<textarea class="form-control" name="q_content" id="q_content"></textarea>
+			<input type="submit" name="submit" value="post question">
     </div>
-    <div class="form-group">
-      Message: <textarea class="form-control" name="q_content" /></textarea>
-    </div>
-
-    <script src='https://www.google.com/recaptcha/api.js'></script>
-    <div class="g-recaptcha"
-         data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI">
-    </div>
-
-    <button type="submit" class="btn btn-primary" id="submit-question">
-      Submit
-    </button>
   </form>
+
+  <script>
+		function validateHuman(){
+
+			// First we extract the values
+			var subject = $("#q_subject").val();
+			var content = $("#q_content").val();
+
+			// Then we do the reCAPTCHA
+			grecaptcha.ready(function() {
+	      grecaptcha.execute('6LfCCqAUAAAAAPHeRLxpWOb7ikxdUuSbAudbnLV0',
+														{action: 'post_question'}).then(function(token) {
+
+					$('#ask-form').prepend(
+							'<input type="hidden" name="g-recaptcha-response" value="' + token + '">');
+					$.post("PushQuestion.php", {q_subject: subject,
+																			q_content: content,
+																			token: token},
+																			function(result){
+																				console.log(result);
+																				if(!result.success){
+																					alert( 'Not passed!');
+																				}
+																				else {
+																					alert( 'Your question is posted!')
+																				}
+																			});
+	      });
+	  	});
+		}
+  </script>
+
 </body>
 
 <script type="text/javascript" src="index_bundle.js"></script></body>

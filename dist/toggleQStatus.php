@@ -1,5 +1,6 @@
 <?php
-/* php file to publish a question
+/**
+ * php file to publish a question
  */
 
 include 'connect.php';
@@ -41,7 +42,7 @@ if( !$result_update ){
   echo 'Error publishing the question.';
 }
 else {
-  // Return to the previous page 
+  // Return to the previous page
   header("Location: {$_SERVER['HTTP_REFERER']}");
   exit;
 }

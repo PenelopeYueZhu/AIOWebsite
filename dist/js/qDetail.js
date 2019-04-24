@@ -13,49 +13,58 @@ function getQuestionDetail() {
   var questionReq = new XMLHttpRequest();
   questionReq.onload = function () {
     // Parse the responce text
+		console.log( questionReq.responseText);
     var questionReqArray = JSON.parse( questionReq.responseText );
-    // Now we write the values into the website
 
-    // First write the question
-    // add a category tag
-    var category = document.createElement('h6');
-    category.className = "category-tag";
-    category.innerHTML = questionReqArray["category"];
+		// Check if we actually returned any details
+		if( questionReqArray == null ) {
+			// Then we display the error message and halt
+			document.getElementById("question_title").innerHTML =
+	      "You do not have access to this question";
+		}
+		// Otherwise we write the values into the website
+		else {
+			// First write the question
+			// add a category tag
+			var category = document.createElement('h6');
+			category.className = "category-tag";
+			category.innerHTML = questionReqArray["category"];
 
-    document.getElementById("question_title").appendChild( category );
-    document.getElementById("question_title").appendChild(
-                      document.createTextNode(questionReqArray["title"] ) );
-    document.getElementById("question_content").innerHTML =
-      questionReqArray["content"];
+			document.getElementById("question_title").appendChild( category );
+			document.getElementById("question_title").appendChild(
+												document.createTextNode(questionReqArray["title"] ) );
+			document.getElementById("question_content").innerHTML =
+				questionReqArray["content"];
 
-    // Then we write the replies
-    var numReplies = questionReqArray["numReplies"];
-    var replies = questionReqArray["replies"];
-    var replyTime = questionReqArray["replyTime"];
-    var replyDiv = document.createElement("div");
+			// Then we write the replies
+			var numReplies = questionReqArray["numReplies"];
+			var replies = questionReqArray["replies"];
+			var replyTime = questionReqArray["replyTime"];
+			var replyDiv = document.createElement("div");
 
-    // Loop through the questions
-    for( var i = 0 ; i < numReplies ; i++ ) {
-      var pContent = document.createElement('p');
-      // Style this reply paragraph
-      pContent.className = "reply-content";
+			// Loop through the questions
+			for( var i = 0 ; i < numReplies ; i++ ) {
+				var pContent = document.createElement('p');
+				// Style this reply paragraph
+				pContent.className = "reply-content";
 
-      var tContent = document.createElement('p');
-      // Style this time line
-      tContent.className = "reply-time";
+				var tContent = document.createElement('p');
+				// Style this time line
+				tContent.className = "reply-time";
 
-      var replyText = document.createTextNode( replies[i] );
-      var individualReplyTime =
-        document.createTextNode( "AIO Office  " +  replyTime[i]);
-      var divideLine = document.createElement( "hr");
+				var replyText = document.createTextNode( replies[i] );
+				var individualReplyTime =
+					document.createTextNode( "AIO Office  " +  replyTime[i]);
+				var divideLine = document.createElement( "hr");
 
-      pContent.appendChild( replyText );
-      tContent.appendChild( individualReplyTime );
-      replyDiv.appendChild( pContent );
-      replyDiv.appendChild( tContent );
-      replyDiv.appendChild( divideLine );
-    }
-    document.getElementById("replies").appendChild( replyDiv );
+				pContent.appendChild( replyText );
+				tContent.appendChild( individualReplyTime );
+				replyDiv.appendChild( pContent );
+				replyDiv.appendChild( tContent );
+				replyDiv.appendChild( divideLine );
+			}
+			document.getElementById("replies").appendChild( replyDiv );
+		}
   }
   questionReq.open( "get",
                     "GetQDetail.php"  +window.location.search);

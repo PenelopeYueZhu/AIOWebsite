@@ -29,7 +29,7 @@ class NavMenu extends Component {
       });
     }
 
-    userDataReq.open( "get", "checkSignedIn.php" );
+    userDataReq.open( "get", "CheckSignedIn.php" );
 
     userDataReq.send();
   }
