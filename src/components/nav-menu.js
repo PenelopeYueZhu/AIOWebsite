@@ -69,7 +69,7 @@ class NavMenu extends Component {
         </li>
         <li className="nav-item">
           <a className="nav-link"
-             href="askQuestion.php">
+             href="askQuestion.html">
               Ask Us A Question
           </a>
         </li>

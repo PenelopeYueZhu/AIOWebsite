@@ -184,7 +184,16 @@ function addPeerOptions() {
                                   'class="btn btn-outline-primary"' +
                                   'id="status_button">' +
                           '</button>' +
-                       '</form>'));
+                       '</form>' +
+											 // The deletion button
+											'<form method="post" ' + 'action="DeleteQuestion.php'
+																	 + window.location.search + '">' +
+												'<button type="submit" ' +
+																'class="btn btn-outline-primary"' +
+																'id="delete_button">' +
+													'Delete' +
+												'</button>' +
+										 '</form>'));
       // Now we have the dom ready, we call each function on the form
       // To populate it
       getCategoryOptions(); // Populate the category
