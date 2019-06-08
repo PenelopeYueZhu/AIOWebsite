@@ -13,8 +13,9 @@ function getQuestionDetail() {
   var questionReq = new XMLHttpRequest();
   questionReq.onload = function () {
     // Parse the responce text
-		console.log( questionReq.responseText);
-    var questionReqArray = JSON.parse( questionReq.responseText );
+		//console.log( questionReq.responseText);
+		console.log( questionReq.responseText );
+		var questionReqArray = JSON.parse( questionReq.responseText );
 
 		// Check if we actually returned any details
 		if( questionReqArray == null ) {
@@ -28,11 +29,11 @@ function getQuestionDetail() {
 			// add a category tag
 			var category = document.createElement('h6');
 			category.className = "category-tag";
-			category.innerHTML = questionReqArray["category"];
+			category.innerHTML = questionReqArray["cat"];
 
 			document.getElementById("question_title").appendChild( category );
 			document.getElementById("question_title").appendChild(
-												document.createTextNode(questionReqArray["title"] ) );
+												document.createTextNode(questionReqArray["subject"] ) );
 			document.getElementById("question_content").innerHTML =
 				questionReqArray["content"];
 
@@ -128,6 +129,7 @@ function getAllCategories() {
 function getPublishStatus() {
   var statusReq = new XMLHttpRequest();
   statusReq.onload = function () {
+		console.log( statusReq.responseText );
     var status = statusReq.responseText;
     // If it's 1, then the question has been published
     if( status.localeCompare( "\"1\"" ) == 0 )
@@ -262,6 +264,7 @@ function getCategoryOptions() {
 function getPublishStatus() {
   var statusReq = new XMLHttpRequest();
   statusReq.onload = function () {
+//		console.log( statusReq.responseText );
     var status = statusReq.responseText;
     // If it's 1, then the question has been published
     if( status.localeCompare( "\"1\"" ) == 0 )

@@ -2,13 +2,41 @@
 /**
  * A php file that gets the detail of the question clicked on by the user
  */
-include 'connect.php';
-include 'GetPublishStatusFunc.php';
+//include 'connect.php';
+//include 'GetPublishStatusFunc.php';
+include 'Database.php';
+session_start();
 
 // Get the id of the question
 $q_id = $_GET['id'];
+// The result array to store all the information about the question
+$resultArray = array();
+$resultArray['subject'] = array();
+$resultArray['content'] = array();
+$resultArray['cat'] = array();
+$resultArray['publishStatus'] = array();
+$resultArray['reply'] = array();
 
-$question_details; // The array for question details
+// Establish database connection
+$database = new Database();
+// Establish connection based on who's using
+if( isset($_SESSION['signed_in'] ) && $_SESSION['signed_in'] == 1 ) {
+	$database->initAdminConnection();
+} else {
+	$database->initROConnection(); // Only getting information
+
+}
+
+if( !$database->getQuestion( $q_id, $resultArray ) ) {
+	exit(1);
+}
+
+$database->endConnection(); // Close the connection
+
+echo json_encode( $resultArray );
+
+
+/*$question_details; // The array for question details
 // Other bunch of variables storing the information of the question
 $title; $category; $content; $numReplies = 0;
 $replyContent = array();
@@ -93,6 +121,6 @@ $question_details["replyTime"] = $replyTime;
 $question_details["replies"] = $replyContent;
 $question_details["publish_status"] = $publish_status;
 
-echo json_encode( $question_details );
+echo json_encode( $question_details );*/
 
 ?>

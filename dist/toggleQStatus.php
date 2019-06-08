@@ -3,7 +3,34 @@
  * php file to publish a question
  */
 
-include 'connect.php';
+include 'Database.php';
+session_start();
+
+// First check if we are signed in. We only allow this action when we are admin
+if( isset($_SESSION['signed_in'] ) && $_SESSION['signed_in'] == 1 ) {
+	// Establish admin connection
+	$database = new Database();
+	$database->initAdminConnection();
+
+	// Now we get the id and thus the publish status of the question we are on
+	$id = $_GET['id'];
+	$status = -1;
+	$database->getPublishStatus( $id, $status );
+
+	// Now we flip the status. 1 - 0 = 1; 1 - 1 = 0
+	$status = 1 - $status;
+	if( !$database->setPublishStatus( $id, $status ) ){
+		echo 'error1';
+		exit(1);
+	}
+
+	// Return to the previous page
+	header("Location: {$_SERVER['HTTP_REFERER']}");
+} else {
+	echo 'error';
+	exit(1);
+}
+/*include 'connect.php';
 
 $q_id = $_GET['id'];
 $new_status = 0;
@@ -45,6 +72,6 @@ else {
   // Return to the previous page
   header("Location: {$_SERVER['HTTP_REFERER']}");
   exit;
-}
+}*/
 
  ?>
