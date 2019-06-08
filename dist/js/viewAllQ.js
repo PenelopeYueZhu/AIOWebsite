@@ -66,7 +66,7 @@ function getAllQuestions( ) {
     // Now we write the values into the website
     var table = document.getElementById("allQTable");
 
-		// Get all the cells, organized by columns 
+		// Get all the cells, organized by columns
     var qTitles = allQReqArray["qTitles"];
     var qCats = allQReqArray["qCats"];
     var qContent = allQReqArray["qContent"];
@@ -138,12 +138,12 @@ function getAllQuestions( ) {
 function getAllCategories() {
   var catReq = new XMLHttpRequest();
   catReq.onload = function () {
+		console.log( catReq.responseText );
     var catsArray = JSON.parse( catReq.responseText );
     // Now we write the values into the website
 
     // Get all the categories
     var allCats = catsArray["categories"];
-    var errors = catsArray["errors"];
     var id = catsArray["catsId"];
 
     // TODO Deal with errors
